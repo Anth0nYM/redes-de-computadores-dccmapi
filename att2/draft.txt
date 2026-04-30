@@ -1,0 +1,84 @@
+2. Um canal sem ruído de 4 kHz tem uma amostra a cada
+1 ms. Qual é a taxa máxima de dados desse canal? Como
+a taxa máxima de dados muda se o canal tiver ruído, com
+uma relação sinal-ruído de 30 dB?
+3. Os canais de televisão têm 6 MHz. Quantos bits/s poderão
+ser enviados, se forem usados sinais digitais de quatro ní-
+veis? Suponha um canal sem ruído.
+4. Se um sinal binário for enviado sobre um canal de 3 kHz
+cuja relação sinal-ruído é de 20 dB, qual será a taxa má-
+xima de dados que poderá ser alcançada?
+5. Qual é a relação sinal-ruído necessária para colocar uma
+portadora T1 em uma linha de 50 kHz?
+6. Quais são as vantagens da fibra óptica em relação ao co-
+bre como meio de transmissão? Existe alguma desvanta-
+gem no uso da fibra óptica em relação ao cobre?
+7. Qual é a largura de banda existente em 0,1 mícron de
+espectro em um comprimento de onda de 1 mícron?
+8. Queremos enviar uma sequência de imagens de tela de
+computador por uma fibra óptica. A tela tem 2.560 ×
+1.600 pixels, e cada pixel tem 24 bits. Há sessenta ima-
+gens de tela por segundo. Qual é a largura de banda ne-
+cessária, e quantos micra de comprimento de onda são
+necessários para essa banda a 1,30 mícron?
+9. O teorema de Nyquist também se aplica à fibra óptica de
+alta qualidade em modo único, ou somente ao fio de cobre?
+10. Em geral, as antenas de rádio funcionam melhor quando
+o diâmetro da antena é igual ao comprimento das ondas
+de rádio. Uma variação razoável para o diâmetro das an-
+tenas é de 1 cm a 5 m. Que faixa de frequências é coberta
+por esse intervalo?
+13. Calcule o tempo de trânsito de ponta a ponta para um
+pacote trafegar pelos satélites GEO (altitude: 35.800 km),
+MEO (altitude: 18.000 km) e LEO (altitude: 750 km).
+14. Qual é a latência de uma chamada originada no Polo Nor-
+te para alcançar o Polo Sul se a chamada for roteada por
+satélites Iridium? Suponha que o tempo de comutação
+nos satélites seja 10 microssegundos e o raio da Terra seja
+6.371 km.
+23. Qual é a taxa de bits máxima alcançável em um modem
+padrão V.32 se a taxa baud for 1.200 e nenhuma correção
+de erro for usada?
+24. Quantas frequências um modem full-duplex QAM-64
+utiliza?
+25. Dez sinais, cada um exigindo 4.000 Hz, são multiplexados
+em um único canal utilizando FDM. Qual é a largura de
+banda mínima exigida para o canal multiplexado? Supo-
+nha que as bandas de proteção tenham 400 Hz de largura.
+32. Quanto tempo levará para transmitir um arquivo de 1 GB
+de um VSAT para outro usando um hub como o mostrado
+na Figura 2.14? Suponha que o uplink seja de 1 Mbps, o
+downlink seja de 7 Mbps e a comutação de circuitos seja
+usada com um tempo de configuração de circuito de 1,2 s.
+33. Calcule o tempo de trânsito no problema anterior se for
+usada a comutação de pacotes. Suponha que o tamanho
+do pacote seja de 64 KB, o atraso de comutação no satélite e no hub seja de 10 microssegundos e o tamanho do
+cabeçalho do pacote seja 32 bytes.
+37. Três redes de comutação de pacotes possuem n nós cada
+uma. A primeira rede tem uma topologia em estrela com
+um switch central, a segunda é um anel (bidirecional) e
+a terceira é totalmente interconectada, com um fio in-
+terligando cada nó. Quais são as opções de caminhos de
+transmissão em hops no melhor caso, no caso médio e no
+pior caso?
+38. Compare o atraso no envio de uma mensagem de x bits
+sobre um caminho de k hops em uma rede comutada por
+circuitos e em uma rede (levemente carregada) comutada
+por pacotes. O tempo de configuração de circuitos é de
+s segundos, o atraso de propagação é de d segundos por
+hop, o tamanho do pacote é de p bits e a taxa de dados é
+de b bps. Sob quais condições a rede de pacotes tem um
+atraso mais baixo? Além disso, explique as condições sob
+as quais uma rede de comutação de pacotes é preferível a
+uma rede de comutação de circuitos.
+39. Suponha que x bits de dados do usuário tenham de ser
+transmitidos por um caminho de k hops em uma rede
+comutada por pacotes como uma série de pacotes, cada
+um contendo p bits de dados e h bits de cabeçalho, sendo
+x >> p + h. A taxa de bits das linhas é b bps e o atraso
+de propagação é desprezível. Que valor de p minimiza o
+atraso total?
+51. Com que velocidade um usuário de cabo recebe dados se a
+rede estiver ociosa? Suponha que a interface do usuário seja (a) Ethernet a 10 Mbps
+(b) Ethernet a 100 Mbps
+(c) Wireless a 54 Mbps.
