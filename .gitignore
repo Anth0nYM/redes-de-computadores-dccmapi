@@ -1,0 +1,50 @@
+# Arquivos centrais do LaTeX (Geralmente não versionados)
+*.aux
+*.bbl
+*.blg
+*.idx
+*.ind
+*.lof
+*.lot
+*.out
+*.toc
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.fls
+*.log
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+
+# Arquivos temporários de ferramentas e editores específicos
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*-blx.bib
+*-blx.aux
+*.cb
+*.cb2
+*.mw
+*.thm
+*.xdy
+*.run.xml
+
+# Arquivos de editores (VS Code, Texmaker, TeXstudio, etc)
+.vscode/
+*.swp
+*~
+*.bak
+*.sav
+*.tmp
+
+# Arquivos específicos do OS (Opcional, mas recomendado)
+.DS_Store
+Thumbs.db
