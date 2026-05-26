@@ -1,0 +1,45 @@
+networks:
+  net-lab:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  server:
+    build: .
+    container_name: ft-server
+    hostname: server
+    networks:
+      net-lab:
+        ipv4_address: 172.20.0.10
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./logs:/app/logs
+    command: python3 server.py
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_TCP_PORT=5000
+      - SERVER_UDP_PORT=5001
+
+  client:
+    build: .
+    container_name: ft-client
+    hostname: client
+    networks:
+      net-lab:
+        ipv4_address: 172.20.0.20
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - server
+    command: sleep infinity
+    environment:
+      - SERVER_HOST=172.20.0.10
+      - SERVER_TCP_PORT=5000
+      - SERVER_UDP_PORT=5001

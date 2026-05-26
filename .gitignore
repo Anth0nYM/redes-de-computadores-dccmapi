@@ -48,3 +48,4 @@
 # Arquivos específicos do OS (Opcional, mas recomendado)
 .DS_Store
 Thumbs.db
+misc
