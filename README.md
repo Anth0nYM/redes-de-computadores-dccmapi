@@ -16,3 +16,5 @@ This is the final project for the Computer Networks course. The full problem sta
 The goal of this phase is to design, implement, and evaluate a Client/Server file transfer system in Python, running inside containers. The system supports two transport modes — native TCP and a custom Reliable UDP (R-UDP) — allowing a direct performance comparison between a standard protocol and a hand-crafted one under controlled network degradation.
 
 #### The Code
+
+> **Note on Traffic Direction:** For the purpose of the cross-validation in Phase 1, the transfer architecture assumes a strict unidirectional flow: the Client always acts as the sender (uploading the file) and the Server always acts as the receiver. Throughput calculations and logs are designed around this assumption, meaning the Client records transmission metrics (`bytes_sent / time`) and the Server records reception metrics (`bytes_received / time`).
