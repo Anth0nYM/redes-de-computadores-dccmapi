@@ -1,0 +1,7 @@
+.git
+logs/
+__pycache__/
+*.pyc
+*.pcap
+*.pdf
+misc/

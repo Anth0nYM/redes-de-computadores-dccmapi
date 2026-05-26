@@ -1,7 +1,10 @@
 .git
-logs/
 __pycache__/
 *.pyc
-*.pcap
 *.pdf
+logs/
+results/
+notebooks/
+artigo_sbc/
 misc/
+data/received/

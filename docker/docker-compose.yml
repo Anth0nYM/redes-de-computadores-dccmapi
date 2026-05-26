@@ -7,7 +7,9 @@ networks:
 
 services:
   server:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: ft-server
     hostname: server
     networks:
@@ -17,15 +19,17 @@ services:
       - NET_ADMIN
       - NET_RAW
     volumes:
-      - ./logs:/app/logs
-    command: python3 server.py
+      - ../logs:/app/logs
+    command: python3 src/server.py
     environment:
       - SERVER_HOST=0.0.0.0
       - SERVER_TCP_PORT=5000
       - SERVER_UDP_PORT=5001
 
   client:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: ft-client
     hostname: client
     networks:
@@ -35,7 +39,7 @@ services:
       - NET_ADMIN
       - NET_RAW
     volumes:
-      - ./logs:/app/logs
+      - ../logs:/app/logs
     depends_on:
       - server
     command: sleep infinity
