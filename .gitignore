@@ -49,3 +49,13 @@
 .DS_Store
 Thumbs.db
 misc
+.mypy_cache
+
+# Arquivos de dados gerados (não versionar binários grandes)
+data/input/*.bin
+data/received/
+logs/app/
+logs/pcap/
+logs/csv/
+__pycache__/
+src/__pycache__/
