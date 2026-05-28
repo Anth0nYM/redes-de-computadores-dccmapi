@@ -2,24 +2,28 @@
 # Orchestrates a single experiment run: tc → tcpdump → transfer → teardown.
 #
 # Usage (from host, targeting the server container):
-#   ./scripts/run_experiment.sh <mode> <scenario>
+#   ./scripts/run_experiment.sh <mode> <scenario> [rep]
 #   mode:     tcp | rudp
 #   scenario: A | B | C
+#   rep:      optional repetition index (e.g. 01, 02 ...) — appended to pcap name
 #
-# Example:
+# Examples:
 #   ./scripts/run_experiment.sh tcp A
+#   ./scripts/run_experiment.sh rudp B 07
 
 set -euo pipefail
 
-MODE="${1:?Usage: run_experiment.sh <mode> <scenario>}"
-SCENARIO="${2:?Usage: run_experiment.sh <mode> <scenario>}"
+MODE="${1:?Usage: run_experiment.sh <mode> <scenario> [rep]}"
+SCENARIO="${2:?Usage: run_experiment.sh <mode> <scenario> [rep]}"
+REP="${3:-}"
 
 SERVER="ft-server"
 CLIENT="ft-client"
 IFACE="eth0"
-PCAP_REMOTE="/app/logs/pcap/capture_${MODE}_${SCENARIO}.pcap"
-TCPDUMP_LOG="/tmp/tcpdump_${MODE}_${SCENARIO}.log"
-TCPDUMP_PID_FILE="/tmp/tcpdump_${MODE}_${SCENARIO}.pid"
+PCAP_SUFFIX="${REP:+_${REP}}"
+PCAP_REMOTE="/app/logs/pcap/capture_${MODE}_${SCENARIO}${PCAP_SUFFIX}.pcap"
+TCPDUMP_LOG="/tmp/tcpdump_${MODE}_${SCENARIO}${PCAP_SUFFIX}.log"
+TCPDUMP_PID_FILE="/tmp/tcpdump_${MODE}_${SCENARIO}${PCAP_SUFFIX}.pid"
 
 log() { echo "[experiment] $*"; }
 
