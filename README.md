@@ -46,7 +46,7 @@ ainda não foi iniciada.
 | 📄 **Relatório SBC** | [`paper/main.pdf`](paper/main.pdf) (fonte em `paper/main.tex`) |
 | 🎥 **Vídeo demonstrativo** | **[assistir](https://drive.google.com/<inserir-link-do-video>)**|
 | 🔎 **Evidências (pcap + X-Custom-Auth)** | `results/evidence/` |
-| 🗂️ **Logs de captura (PCAP/CSV)** | `logs/` (GDrive da entrega) |
+| 🗂️ **Logs de captura (PCAP/CSV)** | Não versionados (binários grandes, ~155 MB) — **[pasta `logs/` no Google Drive](https://drive.google.com/drive/folders/12sBrG_SSxHayG23rZKkMgdw7EalQI_ml?usp=sharing)** (bateria completa: 60 pcaps + JSONL + CSV) |
 
 ## 2. Estrutura do repositório
 
@@ -101,7 +101,7 @@ redes_doutorado/
 │   ├── sbc-template.sty …     #   Arquivos do template SBC (style.sty, sbc.bst)
 │   └── imgs/                  #   Figuras (PNG) embutidas no relatório
 │
-├── logs/                      # GERADO em runtime (não versionado — ver .gitignore)
+├── logs/                      # GERADO em runtime (não versionado — ver .gitignore; disponível no GDrive da entrega)
 │   ├── app/                   #   client_transfers.jsonl, server_transfers.jsonl, battery_*.log
 │   ├── pcap/                  #   60 capturas da bateria completa (1 por execução)
 │   └── csv/                   #   CSV por pacote + pcap_summary.csv
