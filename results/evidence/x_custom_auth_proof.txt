@@ -1,0 +1,47 @@
+===============================================================================
+ PROVA DE TRÁFEGO E DO CAMPO X-Custom-Auth NA CAPTURA DE REDE
+ PPGCC/UFPI - Redes de Computadores 2026-1 - Projeto Fase 1
+ Gerado em: 2026-05-29 12:24:00 -03
+===============================================================================
+
+O campo X-Custom-Auth = <matrícula> <nome> viaja no cabeçalho da aplicação
+(256 bytes, logo após o magic 'RDFT'), tanto no TCP quanto no payload do SYN
+do R-UDP. Por trafegar em claro, é visível na captura .pcap. As seções abaixo
+extraem a string diretamente dos arquivos capturados com:
+
+    tcpdump -r <arquivo.pcap> -A | grep -a 'ANTHONY'      # texto legível
+    tcpdump -r <arquivo.pcap> -X                          # hexdump + ASCII
+
+-------------------------------------------------------------------------------
+ TCP  —  capture_tcp_A_01.pcap
+-------------------------------------------------------------------------------
+$ tcpdump -r capture_tcp_A_01.pcap -A | grep -a 'ANTHONY'
+.Ss.)w. RDFT........y4../.Mx.@+.Xm.-..20261011410 ANTHONY IRLAN MARQUES LUZ.............................................................................................................................................................................................
+
+Hexdump do início do payload (magic 'RDFT' + campo X-Custom-Auth):
+	0x0030:  2977 f920 5244 4654 0000 0000 0010 0000  )w..RDFT........
+	0x0040:  7934 0689 2ff1 4d78 b540 2bb5 586d ae2d  y4../.Mx.@+.Xm.-
+	0x0050:  0000 3230 3236 3130 3131 3431 3020 414e  ..20261011410.AN
+	0x0060:  5448 4f4e 5920 4952 4c41 4e20 4d41 5251  THONY.IRLAN.MARQ
+	0x0070:  5545 5320 4c55 5a00 0000 0000 0000 0000  UES.LUZ.........
+	0x0080:  0000 0000 0000 0000 0000 0000 0000 0000  ................
+
+-------------------------------------------------------------------------------
+ R-UDP  —  capture_rudp_A_01.pcap
+-------------------------------------------------------------------------------
+$ tcpdump -r capture_rudp_A_01.pcap -A | grep -a 'ANTHONY'
+.3....Yp................RDFT.........X....H5..1....R..20261011410 ANTHONY IRLAN MARQUES LUZ.............................................................................................................................................................................................
+
+Hexdump do início do payload (magic 'RDFT' + campo X-Custom-Auth):
+	0x0020:  0000 0000 0000 0000 0100 12c5 5244 4654  ............RDFT
+	0x0030:  0000 0000 0010 0000 f258 f1aa a8b3 4835  .........X....H5
+	0x0040:  9990 31c1 a6cf 8c52 0001 3230 3236 3130  ..1....R..202610
+	0x0050:  3131 3431 3020 414e 5448 4f4e 5920 4952  11410.ANTHONY.IR
+	0x0060:  4c41 4e20 4d41 5251 5545 5320 4c55 5a00  LAN.MARQUES.LUZ.
+	0x0070:  0000 0000 0000 0000 0000 0000 0000 0000  ................
+
+===============================================================================
+ RESUMO: campo X-Custom-Auth localizado nos dois protocolos.
+ Total de pcaps na bateria completa: 60
+ Pcaps representativos neste pacote : 6
+===============================================================================
