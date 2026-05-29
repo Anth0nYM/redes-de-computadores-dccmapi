@@ -77,9 +77,14 @@ parse_one() {
         return 0
     fi
 
-    docker exec "$CONTAINER" tcpdump -r "$pcap" -tttt -n 2>/dev/null \
-        | python3 -c "$PARSER" "$CLIENT_IP" "$SERVER_IP" \
-        > "$csv_out"
+    # A corrupt/truncated pcap makes tcpdump exit non-zero; with `set -e` that would
+    # abort the whole batch, so isolate the failure and skip just this file.
+    if ! docker exec "$CONTAINER" tcpdump -r "$pcap" -tttt -n 2>/dev/null \
+         | python3 -c "$PARSER" "$CLIENT_IP" "$SERVER_IP" > "$csv_out"; then
+        echo "[warn] capture_${mode}_${sc}_${rep}.pcap unreadable/corrupt — skipping" >&2
+        rm -f "$csv_out"
+        return 0
+    fi
 
     local n=$(( $(wc -l < "$csv_out") - 1 ))
     echo "[ok] capture_${mode}_${sc}_${rep}.csv ($n packets)"

@@ -27,9 +27,22 @@ TCPDUMP_PID_FILE="/tmp/tcpdump_${MODE}_${SCENARIO}${PCAP_SUFFIX}.pid"
 
 log() { echo "[experiment] $*"; }
 
-# ── 1. apply tc rules on the server ──────────────────────────────────────────
-log "applying tc scenario $SCENARIO on $SERVER"
-docker exec "$SERVER" bash /app/scripts/apply_tc.sh "$SCENARIO" "$IFACE"
+# ── 1. apply tc rules: loss on the DATA path, delay on both directions ───────
+# Loss is injected only on the CLIENT egress (the client→server DATA path), so the
+# R-UDP retransmission logic is fully exercised by lost DATA segments. The SERVER
+# egress (ACK path) gets the same delay but NO loss — this keeps RTT ≈ 2×delay
+# while avoiding the RTO-storm behaviour that 20% loss in BOTH directions inflicts
+# on TCP (which pushed a single 1 MB run past 5 minutes). Degrading only the server
+# would instead leave the DATA path loss-free and the retransmission logic idle.
+case "$SCENARIO" in
+  A) DELAY="10ms"  ;;
+  B) DELAY="50ms"  ;;
+  C) DELAY="100ms" ;;
+  *) echo "[experiment] ERROR: unknown scenario: $SCENARIO" >&2; exit 1 ;;
+esac
+log "applying tc: $CLIENT egress = scenario $SCENARIO (delay+loss); $SERVER egress = delay $DELAY (no loss)"
+docker exec "$CLIENT" bash /app/scripts/apply_tc.sh "$SCENARIO" "$IFACE"
+docker exec "$SERVER" bash -c "tc qdisc del dev $IFACE root 2>/dev/null; tc qdisc add dev $IFACE root netem delay $DELAY"
 
 # ── 2. start tcpdump and wait until it is genuinely capturing ────────────────
 log "starting tcpdump on $SERVER"
@@ -68,8 +81,9 @@ docker exec "$SERVER" bash -c "
 "
 log "tcpdump stopped — pcap saved to $PCAP_REMOTE"
 
-# ── 5. clear tc rules ─────────────────────────────────────────────────────────
-log "clearing tc rules on $SERVER"
+# ── 5. clear tc rules on BOTH endpoints ──────────────────────────────────────
+log "clearing tc rules on $SERVER and $CLIENT"
 docker exec "$SERVER" bash /app/scripts/clear_tc.sh "$IFACE"
+docker exec "$CLIENT" bash /app/scripts/clear_tc.sh "$IFACE"
 
 log "done: mode=$MODE scenario=$SCENARIO"

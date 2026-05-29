@@ -9,7 +9,7 @@ Repository for the Computer Networks graduate course.
 
 ## Computer Networks Course Project (2026-1)
 
-This is the final project for the Computer Networks course. The full problem statement and guidelines are available in `roteiro.pdf`.
+This is the final project for the Computer Networks course. The full problem statement and guidelines are available in `description.pdf`.
 
 ### Phase 1 — File Transfer System over TCP and Reliable UDP
 
@@ -21,9 +21,16 @@ The goal of this phase is to design, implement, and evaluate a Client/Server fil
 
 ### Experiment
 
-- Arquivo: test_1MB.bin (1 MB fixo) — hardcoded como default em client.py
-- Repetições: 30 por combinação
-- Modos: TCP e R-UDP
-- Cenários: A (0% loss / 10ms), B (10% loss / 50ms), C (20% loss / 100ms)
-- Total de transferências: 30 × 2 × 3 = 180 runs
-- Pcaps: 180 arquivos individuais (capture_tcp_A_01.pcap … capture_rudp_C_30.pcap)
+- Arquivo: `test_1MB.bin` (1 MB fixo) — default em `client.py`
+- Repetições: 10 por combinação (modo × cenário)
+- Modos: TCP nativo e R-UDP (Go-Back-N, janela 8)
+- Cenários: A (0% loss / 10 ms), B (10% loss / 50 ms), C (20% loss / 100 ms)
+- Total de transferências: 10 × 2 × 3 = 60 runs
+- Pcaps: 60 arquivos individuais (`capture_<modo>_<cenário>_01.pcap` … `_10.pcap`)
+
+**Emulação de rede (`tc netem`).** A perda é aplicada no *egress* do **cliente**
+(caminho de DADOS, cliente→servidor) e o **atraso** em ambos os sentidos
+(`RTT ≈ 2 × atraso`). Assim os pacotes de dados sofrem perda — exercitando a
+retransmissão do R-UDP — sem submeter o TCP às tempestades de RTO da perda
+bidirecional de 20% (que levava uma transferência de 1 MB a ~5 min). A análise
+estatística está em `notebooks/main.ipynb`.

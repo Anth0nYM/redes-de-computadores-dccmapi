@@ -15,6 +15,12 @@ TCP_PORT     = int(os.environ.get("SERVER_TCP_PORT", 5000))
 UDP_PORT     = int(os.environ.get("SERVER_UDP_PORT", 5001))
 DEFAULT_FILE = os.environ.get("TRANSFER_FILE", "/app/data/input/test_1MB.bin")
 WINDOW_SIZE  = int(os.environ.get("WINDOW_SIZE", "8"))
+# Connect quickly, but allow a long transfer: under heavy bidirectional loss the
+# native TCP stack spends most of the time in RTO back-off, so 1 MB can take well
+# over a minute. A short hard timeout here would silently drop the slowest runs and
+# bias the TCP results optimistically.
+CONNECT_TIMEOUT_S = float(os.environ.get("CONNECT_TIMEOUT_S", "60"))
+TCP_TIMEOUT_S     = float(os.environ.get("TCP_TIMEOUT_S", "600"))
 
 
 def main() -> None:
@@ -39,7 +45,8 @@ def main() -> None:
     )
 
     if mode == "TCP":
-        with socket.create_connection((SERVER_HOST, TCP_PORT), timeout=120) as conn:
+        with socket.create_connection((SERVER_HOST, TCP_PORT), timeout=CONNECT_TIMEOUT_S) as conn:
+            conn.settimeout(TCP_TIMEOUT_S)
             _tcp_send(conn, path, logger)
     else:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
