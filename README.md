@@ -44,7 +44,7 @@ ainda não foi iniciada.
 | 💻 **Código-fonte** | [github.com/Anth0nYM/redes-de-computadores-dccmapi](https://github.com/Anth0nYM/redes-de-computadores-dccmapi) (`src/`, `scripts/`, `docker/`) |
 | 📓 **Análise + Colab** | `notebooks/main.ipynb` (8 figuras, executável no Google Colab) |
 | 📄 **Relatório SBC** | [`paper/main.pdf`](paper/main.pdf) (fonte em `paper/main.tex`) |
-| 🎥 **Vídeo demonstrativo** | **[assistir](https://drive.google.com/<inserir-link-do-video>)**|
+| 🎥 **Vídeo demonstrativo** | **[assistir no YouTube](https://youtu.be/3VaU2eYaHXo)** |
 | 🔎 **Evidências (pcap + X-Custom-Auth)** | `results/evidence/` |
 | 🗂️ **Logs de captura (PCAP/CSV)** | Não versionados (binários grandes, ~155 MB) — **[pasta `logs/` no Google Drive](https://drive.google.com/drive/folders/12sBrG_SSxHayG23rZKkMgdw7EalQI_ml?usp=sharing)** (bateria completa: 60 pcaps + JSONL + CSV) |
 
@@ -289,7 +289,7 @@ Trecho de `x_custom_auth_proof.txt` (hexdump do início do payload TCP):
 | **Análise Estatística** | Gráficos (Média/Desvio) TCP vs. R-UDP em cada cenário: **Vazão, Atrasos, Perdas, Retransmissões**. | 2.0 | `notebooks/main.ipynb`, cobrindo as quatro métricas do enunciado: **Vazão** → Fig. 2; **Atrasos** → Fig. 7 (RTT medido vs nominal); **Perdas** → Fig. 8 (perda efetiva vs configurada); **Retransmissões** → Figs. 3–4. Mais Fig. 1 (tempo) e a tabela §4 (mediana, IC 95% e **média ± DP**). Saídas em `results/figures/` e `results/tables/summary_stats.csv`. |
 | **Integração de Dados** | Comparação entre o que a aplicação mediu e o que o TCPDump registrou. | 1.0 | `notebooks/main.ipynb` §5 — Fig. 5 (pacotes na rede) e Fig. 6 (duração app × rede) + tabela de cross-validação; pipeline `scripts/export_pcap_to_csv.sh` → `pcap_summary.csv`. |
 | **Relatório (SBC)** | Documentação técnica, discussão e respostas às perguntas. | 1.0 | ✅ [`paper/main.pdf`](paper/main.pdf) — artigo no formato SBC (9 páginas, com as 8 figuras e a tabela de cenários), cobrindo metodologia, resultados, respostas às perguntas e trabalhos futuros. Fonte em `paper/main.tex`, referências em `paper/references.bib`. |
-| **Vídeo Demonstrativo** | Explicação da implementação e demonstração dos testes de perda. | 1.0 | ✅ Disponível em **[\<inserir link do vídeo\>](https://drive.google.com/<inserir-link-do-video>)**. Conteúdo: implementação (`src/`) → bateria (`scripts/`) → retransmissões do R-UDP e `X-Custom-Auth` no `.pcap` (§5). |
+| **Vídeo Demonstrativo** | Explicação da implementação e demonstração dos testes de perda. | 1.0 | ✅ Disponível em **[youtu.be/3VaU2eYaHXo](https://youtu.be/3VaU2eYaHXo)**. Conteúdo: implementação (`src/`) → bateria (`scripts/`) → retransmissões do R-UDP e `X-Custom-Auth` no `.pcap` (§5). |
 
 **Total da Fase 1: 10 pontos.** Todos os critérios atendidos e evidenciados: ambiente
 Docker/TC, protocolo R-UDP, validação TCPDump, análise estatística e integração de dados
