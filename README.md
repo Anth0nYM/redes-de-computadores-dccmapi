@@ -43,7 +43,7 @@ ainda não foi iniciada.
 | 💻 **Código-fonte** | este repositório (`src/`, `scripts/`, `docker/`) |
 | 📓 **Análise + Colab** | `notebooks/main.ipynb` (8 figuras, executável no Google Colab) |
 | 📄 **Relatório SBC** | [`paper/main.pdf`](paper/main.pdf) (fonte em `paper/main.tex`) |
-| 🎥 **Vídeo demonstrativo** | **[assistir](https://drive.google.com/<inserir-link-do-video>)** *(substituir pelo link real)* |
+| 🎥 **Vídeo demonstrativo** | **[assistir](https://drive.google.com/<inserir-link-do-video>)**|
 | 🔎 **Evidências (pcap + X-Custom-Auth)** | `results/evidence/` |
 | 🗂️ **Logs de captura (PCAP/CSV)** | `logs/` (GDrive da entrega) |
 
