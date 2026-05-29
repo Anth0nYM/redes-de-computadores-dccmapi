@@ -1,0 +1,15 @@
+===============================================================================
+ ENTREGA - FASE 1
+ Redes de Computadores 2026.1 - PPGCC/UFPI
+ Aluno: Anthony Irlan Marques Luz - Matricula: 20261011410
+===============================================================================
+
+1. REPOSITORIO PRINCIPAL
+   https://github.com/Anth0nYM/redes-de-computadores-dccmapi
+
+2. VIDEO DEMONSTRATIVO (YouTube)
+   https://youtu.be/3VaU2eYaHXo
+
+3. RELATORIO (SBC)
+   Caminho no repositorio: paper/main.pdf
+   (fonte LaTeX: paper/main.tex)
