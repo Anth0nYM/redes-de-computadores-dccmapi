@@ -2,6 +2,7 @@
 
 **PPGCC/UFPI — Campus Senador Helvídio Nunes de Barros**
 Autor: **Anthony Irlan Marques Luz** · Matrícula **20261011410**
+Repositório: [github.com/Anth0nYM/redes-de-computadores-dccmapi](https://github.com/Anth0nYM/redes-de-computadores-dccmapi)
 Enunciado completo: [`description.pdf`](description.pdf)
 
 ---
@@ -40,7 +41,7 @@ ainda não foi iniciada.
 
 | Entregável | Onde está |
 |------------|-----------|
-| 💻 **Código-fonte** | este repositório (`src/`, `scripts/`, `docker/`) |
+| 💻 **Código-fonte** | [github.com/Anth0nYM/redes-de-computadores-dccmapi](https://github.com/Anth0nYM/redes-de-computadores-dccmapi) (`src/`, `scripts/`, `docker/`) |
 | 📓 **Análise + Colab** | `notebooks/main.ipynb` (8 figuras, executável no Google Colab) |
 | 📄 **Relatório SBC** | [`paper/main.pdf`](paper/main.pdf) (fonte em `paper/main.tex`) |
 | 🎥 **Vídeo demonstrativo** | **[assistir](https://drive.google.com/<inserir-link-do-video>)**|
