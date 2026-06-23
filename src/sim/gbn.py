@@ -99,12 +99,18 @@ class _GBNEngine:
         window_size: int,
         timeout_s: float,
         channel: NetworkChannel,
+        tx_time_s: float = 0.0,
     ):
         self.env = env
         self.num_blocks = num_blocks
         self.window = window_size
         self.timeout_s = timeout_s
         self.channel = channel
+        # Per-packet serialization time on the bottleneck link (0 == infinite
+        # bandwidth, the RTT-bound default). A positive value spaces consecutive
+        # data packets, capping throughput at the link rate so the window curve
+        # has a knee at N ~ BDP/block.
+        self.tx_time_s = tx_time_s
 
         # Sender state.
         self.base = 0
@@ -161,7 +167,12 @@ class _GBNEngine:
         """Transmit one data packet through the lossy, FIFO channel."""
         if self.channel.should_drop():
             return  # lost in flight: no delivery event scheduled
-        arrival = max(self.env.now + self._one_way_delay_s(), self._last_data_arrival)
+        # FIFO + serialization: a packet leaves the link no sooner than the
+        # previous one finished transmitting (tx_time_s spacing => rate cap).
+        arrival = max(
+            self.env.now + self._one_way_delay_s(),
+            self._last_data_arrival + self.tx_time_s,
+        )
         self._last_data_arrival = arrival
         self.env.process(self._deliver_data(seq, arrival))
 
@@ -208,10 +219,14 @@ class GBNProtocol:
         mean_delay_ms: float = 50,
         loss_rate: float = 0.271,
         jitter_ms: float = 0,
+        bandwidth_KBps: float | None = None,
     ):
         self.window_size = window_size
         self.timeout_ms = timeout_ms
         self.channel = NetworkChannel(mean_delay_ms, loss_rate, jitter_ms)
+        # None == infinite bandwidth (RTT-bound). A finite link rate adds
+        # per-packet serialization, used by the window-sensitivity study (D6).
+        self.bandwidth_KBps = bandwidth_KBps
         self.retrans_count = 0
         self.elapsed_s = 0.0
 
@@ -228,6 +243,10 @@ class GBNProtocol:
         """
         num_blocks = (len(data) + block_size - 1) // block_size
 
+        tx_time_s = 0.0
+        if self.bandwidth_KBps:
+            tx_time_s = block_size / (self.bandwidth_KBps * 1024)
+
         env = simpy.Environment()
         engine = _GBNEngine(
             env=env,
@@ -235,6 +254,7 @@ class GBNProtocol:
             window_size=self.window_size,
             timeout_s=self.timeout_ms / 1000.0,
             channel=self.channel,
+            tx_time_s=tx_time_s,
         )
         env.run(until=engine.done)
 
