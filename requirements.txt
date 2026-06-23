@@ -6,3 +6,6 @@ pytest>=7.4
 plotly>=5.18
 numpy>=1.26
 scipy>=1.12
+# Exportar figuras Plotly para PNG. kaleido>=1.0 requer um Chrome headless:
+# rode `plotly_get_chrome` uma vez (no Colab o Chrome já existe).
+kaleido>=1.0

@@ -9,7 +9,7 @@ from results/tables/summary_stats.csv.
 import numpy as np
 
 from src.sim.gbn import GBNProtocol
-from src.sim.validate import REAL_DATA, SCENARIO_PARAMS, PAYLOAD_BYTES
+from src.sim.validate import REAL_DATA, SCENARIO_PARAMS, PAYLOAD_BYTES, BLOCK_SIZE
 
 
 def bootstrap_ci(
@@ -61,7 +61,7 @@ class ConvergenceAnalyzer:
                 mean_delay_ms=params["mean_delay_ms"],
                 loss_rate=params["loss_rate"],
             )
-            protocol.transfer(b"X" * PAYLOAD_BYTES)
+            protocol.transfer(b"X" * PAYLOAD_BYTES, block_size=BLOCK_SIZE)
             times.append(protocol.elapsed_s)
             retx.append(protocol.retrans_count)
         return times, retx

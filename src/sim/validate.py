@@ -22,7 +22,11 @@ SCENARIO_PARAMS = {
     "C": {"mean_delay_ms": 100, "loss_rate": 0.488},
 }
 
-PAYLOAD_BYTES = 256 * 1024  # 256 blocks of 1 KiB
+# Real R-UDP used 4 KiB blocks: 256 blocks == a 1 MiB file (matches the real
+# tput_mean of ~1515 KBps for scenario A). Block size drives throughput; the
+# RTT-bound time model depends on the block count (256), not the block size.
+BLOCK_SIZE = 4096
+PAYLOAD_BYTES = 256 * BLOCK_SIZE  # 1 MiB, 256 blocks
 
 
 class CalibrationValidator:
@@ -43,7 +47,7 @@ class CalibrationValidator:
                 mean_delay_ms=params["mean_delay_ms"],
                 loss_rate=params["loss_rate"],
             )
-            protocol.transfer(b"X" * PAYLOAD_BYTES)
+            protocol.transfer(b"X" * PAYLOAD_BYTES, block_size=BLOCK_SIZE)
             times.append(protocol.elapsed_s)
             retx_list.append(protocol.retrans_count)
 
