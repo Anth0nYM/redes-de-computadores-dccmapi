@@ -17,10 +17,11 @@ class TestCalibration:
         assert "time_mean_s" in result
         assert "retx_mean" in result
 
-        # Should execute without error
-        assert result["time_mean_s"] > 0, "Time should be positive"
+        # Calibrated against real RUDP (0.676s, 0 retx).
+        assert 0.5 < result["time_mean_s"] < 0.85, \
+            f"Scenario A time: expected ~0.676s, got {result['time_mean_s']:.3f}s"
 
-        # No retransmissions
+        # No retransmissions without loss.
         assert result["retx_mean"] < 1, \
             f"Scenario A should have ~0 retransmissions, got {result['retx_mean']:.1f}"
 
@@ -34,9 +35,11 @@ class TestCalibration:
         assert "time_mean_s" in result
         assert "retx_mean" in result
 
-        # Should execute without error
-        assert result["time_mean_s"] > 0, "Time should be positive"
-        assert result["retx_mean"] >= 0, "Retransmissions should be non-negative"
+        # Calibrated against real RUDP (53.2s, 91.1 retx).
+        assert 40 < result["time_mean_s"] < 65, \
+            f"Scenario B time: expected ~53.2s, got {result['time_mean_s']:.1f}s"
+        assert 75 < result["retx_mean"] < 115, \
+            f"Scenario B retx: expected ~91.1, got {result['retx_mean']:.1f}"
 
     def test_scenario_c_high_loss(self):
         """Scenario C: High loss."""
@@ -48,9 +51,11 @@ class TestCalibration:
         assert "time_mean_s" in result
         assert "retx_mean" in result
 
-        # Should execute without error
-        assert result["time_mean_s"] > 0, "Time should be positive"
-        assert result["retx_mean"] >= 0, "Retransmissions should be non-negative"
+        # Calibrated against real RUDP (144.6s, 238.5 retx).
+        assert 100 < result["time_mean_s"] < 165, \
+            f"Scenario C time: expected ~144.6s, got {result['time_mean_s']:.1f}s"
+        assert 210 < result["retx_mean"] < 280, \
+            f"Scenario C retx: expected ~238.5, got {result['retx_mean']:.1f}"
 
     def test_calibration_report(self):
         """Should generate comparison table."""

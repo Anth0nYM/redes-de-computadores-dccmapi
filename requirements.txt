@@ -1,6 +1,8 @@
 scapy==2.5.0
-simpy==4.1.1
-pytest==7.4.3
-plotly==5.18.0
-numpy==1.26.2
-scipy==1.12.0
+# Fase 2 (simulador SimPy). Mínimos com >= para usar wheels pré-compiladas
+# em Python 3.14 (pins exatos antigos forçavam build do fonte e falhavam).
+simpy>=4.1
+pytest>=7.4
+plotly>=5.18
+numpy>=1.26
+scipy>=1.12
