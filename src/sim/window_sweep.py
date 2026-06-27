@@ -103,13 +103,12 @@ class WindowSweep:
         return windows[-1]
 
 
-def generate_figure(
-    output_path: str = "results/figures/fig_janela.png",
+def build_figure(
     bandwidth_KBps: float = 2000.0,
     windows: list[int] | None = None,
     reps: int = 5,
-) -> str:
-    """Render the throughput-vs-window figure with the theoretical knee marked."""
+):
+    """Build and return the throughput-vs-window figure with the knee marked."""
     import plotly.graph_objects as go
 
     sweep = WindowSweep(bandwidth_KBps=bandwidth_KBps, windows=windows, reps=reps)
@@ -139,7 +138,19 @@ def generate_figure(
         yaxis_title="Vazão (KB/s)",
         template="plotly_white",
     )
+    return fig
 
+
+def generate_figure(
+    output_path: str = "results/figures/fig_janela.png",
+    bandwidth_KBps: float = 2000.0,
+    windows: list[int] | None = None,
+    reps: int = 5,
+) -> str:
+    """Render the throughput-vs-window figure to a PNG and return its path."""
+    fig = build_figure(
+        bandwidth_KBps=bandwidth_KBps, windows=windows, reps=reps
+    )
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     fig.write_image(output_path)
     return output_path

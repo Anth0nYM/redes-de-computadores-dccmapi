@@ -91,12 +91,11 @@ class EfficiencyStudy:
         return out
 
 
-def generate_figure(
-    output_path: str = "results/figures/fig_eficiencia.png",
+def build_figure(
     reps: int = 30,
     seed: int | None = 1,
-) -> str:
-    """Render the DATA/ACK ratio per scenario as a bar chart."""
+):
+    """Build the DATA/ACK ratio bar chart per scenario."""
     import plotly.graph_objects as go
 
     study = EfficiencyStudy(reps=reps, seed=seed)
@@ -127,7 +126,16 @@ def generate_figure(
         yaxis_title="Razao DATA/ACK (maior = pior)",
         template="plotly_white",
     )
+    return fig
 
+
+def generate_figure(
+    output_path: str = "results/figures/fig_eficiencia.png",
+    reps: int = 30,
+    seed: int | None = 1,
+) -> str:
+    """Render the efficiency figure to a PNG and return its path."""
+    fig = build_figure(reps=reps, seed=seed)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     fig.write_image(output_path)
     return output_path

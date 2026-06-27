@@ -88,5 +88,56 @@ class CalibrationValidator:
         return report
 
 
+def _sim_vs_real(num_reps: int = 30) -> dict:
+    """Collect sim and real (time, retx) per scenario for the calibration plots."""
+    validator = CalibrationValidator(num_reps=num_reps)
+    rows = {s: validator._run_scenario(s) for s in ("A", "B", "C")}
+    return rows
+
+
+def build_time_figure(num_reps: int = 30):
+    """Grouped bars comparing simulated vs real transfer time per scenario."""
+    import plotly.graph_objects as go
+
+    scenarios = ["A", "B", "C"]
+    rows = _sim_vs_real(num_reps)
+    sim = [rows[s]["time_mean_s"] for s in scenarios]
+    real = [REAL_DATA[s]["time_mean_s"] for s in scenarios]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=scenarios, y=sim, name="Simulado", marker_color="#1f77b4"))
+    fig.add_trace(go.Bar(x=scenarios, y=real, name="Real", marker_color="#d62728"))
+    fig.update_layout(
+        title="Calibração: tempo de transferência (sim vs real)",
+        xaxis_title="Cenário",
+        yaxis_title="Tempo (s)",
+        barmode="group",
+        template="plotly_white",
+    )
+    return fig
+
+
+def build_retx_figure(num_reps: int = 30):
+    """Grouped bars comparing simulated vs real retransmissions per scenario."""
+    import plotly.graph_objects as go
+
+    scenarios = ["A", "B", "C"]
+    rows = _sim_vs_real(num_reps)
+    sim = [rows[s]["retx_mean"] for s in scenarios]
+    real = [REAL_DATA[s]["retx_mean"] for s in scenarios]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=scenarios, y=sim, name="Simulado", marker_color="#1f77b4"))
+    fig.add_trace(go.Bar(x=scenarios, y=real, name="Real", marker_color="#d62728"))
+    fig.update_layout(
+        title="Calibração: retransmissões (sim vs real)",
+        xaxis_title="Cenário",
+        yaxis_title="Retransmissões (eventos de timeout)",
+        barmode="group",
+        template="plotly_white",
+    )
+    return fig
+
+
 if __name__ == "__main__":
     print(CalibrationValidator().generate_report())

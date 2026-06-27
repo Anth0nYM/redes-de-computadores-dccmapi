@@ -87,13 +87,12 @@ class ThroughputCurve:
         )
 
 
-def generate_figure(
-    output_path: str = "results/figures/fig_vazao_tamanho.png",
+def build_figure(
     scenarios: list[str] | None = None,
     sizes_mb: list[float] | None = None,
     reps: int = 5,
-) -> str:
-    """Render the throughput-vs-filesize figure with Plotly."""
+):
+    """Build and return the throughput-vs-filesize Plotly figure."""
     import plotly.graph_objects as go
 
     scenarios = scenarios or ["A", "B"]
@@ -129,7 +128,17 @@ def generate_figure(
         yaxis_title="Vazão (KB/s)",
         template="plotly_white",
     )
+    return fig
 
+
+def generate_figure(
+    output_path: str = "results/figures/fig_vazao_tamanho.png",
+    scenarios: list[str] | None = None,
+    sizes_mb: list[float] | None = None,
+    reps: int = 5,
+) -> str:
+    """Render the throughput-vs-filesize figure to a PNG and return its path."""
+    fig = build_figure(scenarios=scenarios, sizes_mb=sizes_mb, reps=reps)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     fig.write_image(output_path)
     return output_path

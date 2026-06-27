@@ -125,12 +125,11 @@ class StressForecast:
         return out
 
 
-def generate_figure(
-    output_path: str = "results/figures/fig_estresse.png",
+def build_figure(
     reps: int = 30,
     seed: int | None = 1,
-) -> str:
-    """Render the forecast-vs-loss curve with the real B/C anchors marked."""
+):
+    """Build the forecast-vs-loss curve with the real C anchor marked."""
     import plotly.graph_objects as go
 
     raws = [0.10, 0.20, 0.25]
@@ -168,7 +167,16 @@ def generate_figure(
         yaxis_title="Tempo de transferencia (s)",
         template="plotly_white",
     )
+    return fig
 
+
+def generate_figure(
+    output_path: str = "results/figures/fig_estresse.png",
+    reps: int = 30,
+    seed: int | None = 1,
+) -> str:
+    """Render the stress forecast figure to a PNG and return its path."""
+    fig = build_figure(reps=reps, seed=seed)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     fig.write_image(output_path)
     return output_path

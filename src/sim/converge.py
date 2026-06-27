@@ -108,5 +108,41 @@ class ConvergenceAnalyzer:
         return report
 
 
+def build_figure(num_reps: int = 30, seed: int | None = 1):
+    """Mean transfer time with 95% bootstrap CI error bars, sim vs real."""
+    import plotly.graph_objects as go
+
+    scenarios = ["A", "B", "C"]
+    analyzer = ConvergenceAnalyzer(num_reps=num_reps, seed=seed)
+    stats = {s: analyzer.analyze_scenario(s) for s in scenarios}
+
+    means = [stats[s]["time_mean_s"] for s in scenarios]
+    lo = [stats[s]["time_mean_s"] - stats[s]["time_ci_lower"] for s in scenarios]
+    hi = [stats[s]["time_ci_upper"] - stats[s]["time_mean_s"] for s in scenarios]
+    real = [REAL_DATA[s]["time_mean_s"] for s in scenarios]
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=scenarios, y=means, mode="markers", name="Simulado (média ± IC 95%)",
+            marker=dict(color="#1f77b4", size=12),
+            error_y=dict(type="data", symmetric=False, array=hi, arrayminus=lo),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=scenarios, y=real, mode="markers", name="Real (medido)",
+            marker=dict(color="#d62728", size=12, symbol="x"),
+        )
+    )
+    fig.update_layout(
+        title="Convergência: tempo médio com IC 95% (bootstrap, ≥30 reps)",
+        xaxis_title="Cenário",
+        yaxis_title="Tempo de transferência (s)",
+        template="plotly_white",
+    )
+    return fig
+
+
 if __name__ == "__main__":
     print(ConvergenceAnalyzer(num_reps=30).generate_report())

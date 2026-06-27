@@ -102,13 +102,12 @@ class JitterSweep:
         return all(b > a for a, b in zip(stds, stds[1:]))
 
 
-def generate_figure(
-    output_path: str = "results/figures/fig_jitter.png",
+def build_figure(
     jitters: list[float] | None = None,
     reps: int = 40,
     seed: int | None = 1,
-) -> str:
-    """Render mean transfer time with +/-1 std error bars vs jitter."""
+):
+    """Build the mean-transfer-time +/-1 std vs jitter figure."""
     import plotly.graph_objects as go
 
     sweep = JitterSweep(jitters=jitters, reps=reps, seed=seed)
@@ -134,7 +133,17 @@ def generate_figure(
         yaxis_title="Tempo de transferencia (s)",
         template="plotly_white",
     )
+    return fig
 
+
+def generate_figure(
+    output_path: str = "results/figures/fig_jitter.png",
+    jitters: list[float] | None = None,
+    reps: int = 40,
+    seed: int | None = 1,
+) -> str:
+    """Render the jitter figure to a PNG and return its path."""
+    fig = build_figure(jitters=jitters, reps=reps, seed=seed)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     fig.write_image(output_path)
     return output_path
