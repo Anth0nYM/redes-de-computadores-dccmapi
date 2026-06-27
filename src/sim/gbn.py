@@ -117,6 +117,12 @@ class _GBNEngine:
         self.next_seq = 0
         self.retrans_count = 0
 
+        # Packet counters for the efficiency study (D9): every DATA put on the
+        # wire (including retransmissions, counted before the drop) and every
+        # cumulative ACK the receiver emits (one per arriving DATA packet).
+        self.data_sends = 0
+        self.ack_sends = 0
+
         # Receiver state.
         self.expected = 0
 
@@ -165,6 +171,7 @@ class _GBNEngine:
 
     def _send_data(self, seq: int):
         """Transmit one data packet through the lossy, FIFO channel."""
+        self.data_sends += 1  # transmitted onto the wire (loss happens after)
         if self.channel.should_drop():
             return  # lost in flight: no delivery event scheduled
         # FIFO + serialization: a packet leaves the link no sooner than the
@@ -187,6 +194,7 @@ class _GBNEngine:
             self.expected += 1
         ack_num = self.expected - 1  # highest in-order block received
         if ack_num >= 0:
+            self.ack_sends += 1  # one cumulative ACK per arriving DATA packet
             arrival = max(
                 self.env.now + self._one_way_delay_s(), self._last_ack_arrival
             )
@@ -229,6 +237,8 @@ class GBNProtocol:
         self.bandwidth_KBps = bandwidth_KBps
         self.retrans_count = 0
         self.elapsed_s = 0.0
+        self.data_packets = 0  # DATA put on the wire, incl. retransmissions
+        self.ack_packets = 0   # cumulative ACKs emitted by the receiver
 
     def transfer(self, data: bytes, block_size: int = 1024) -> tuple[int, int]:
         """
@@ -260,4 +270,6 @@ class GBNProtocol:
 
         self.retrans_count = engine.retrans_count
         self.elapsed_s = env.now
+        self.data_packets = engine.data_sends
+        self.ack_packets = engine.ack_sends
         return len(data), self.retrans_count
