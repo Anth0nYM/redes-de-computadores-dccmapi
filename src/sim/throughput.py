@@ -5,7 +5,7 @@ sender keeps at most ``window`` packets in flight per RTT). For small files the
 fixed connection-setup RTT is a large fraction of the transfer, so throughput
 sits below the ceiling; as the file grows the setup amortizes and throughput
 saturates at the ceiling. This module measures that curve from the SimPy engine
-and renders it to ``fig_vazao_tamanho.png``.
+and renders it to ``fase2_vazao_tamanho.png``.
 """
 
 import os
@@ -132,7 +132,7 @@ def build_figure(
 
 
 def generate_figure(
-    output_path: str = "results/figures/fig_vazao_tamanho.png",
+    output_path: str = "results/figures/fase2_vazao_tamanho.png",
     scenarios: list[str] | None = None,
     sizes_mb: list[float] | None = None,
     reps: int = 5,

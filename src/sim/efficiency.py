@@ -130,7 +130,7 @@ def build_figure(
 
 
 def generate_figure(
-    output_path: str = "results/figures/fig_eficiencia.png",
+    output_path: str = "results/figures/fase2_eficiencia.png",
     reps: int = 30,
     seed: int | None = 1,
 ) -> str:

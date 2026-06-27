@@ -221,7 +221,7 @@ garantia.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig1_tempo.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_tempo.png}
 \caption{Tempo de transferência por cenário (escala logarítmica). Caixas estreitas
 indicam consistência; o alongamento reflete a penalidade imposta pela perda estocástica.}
 \label{fig:tempo}
@@ -229,7 +229,7 @@ indicam consistência; o alongamento reflete a penalidade imposta pela perda est
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig2_throughput.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_throughput.png}
 \caption{Vazão mediana por cenário com IC de 95\% (\emph{bootstrap}), em escala
 logarítmica.}
 \label{fig:vazao}
@@ -251,7 +251,7 @@ amortecendo a variância através do colapso conservador de sua janela de conges
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig7_rtt.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_rtt.png}
 \caption{Validação do ambiente: RTT empírico (\texttt{tcpdump}) \emph{vs.} RTT nominal esperado.
 As medições alinham-se perfeitamente aos parâmetros do \texttt{tc netem}.}
 \label{fig:rtt}
@@ -267,7 +267,7 @@ validando de forma definitiva a calibração do emulador.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig8_perdas.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_perdas.png}
 \caption{Perda de pacotes: efetiva medida pelo R-UDP \emph{vs.} taxa bruta configurada \emph{vs.} 
 projeção analítica do modelo $1-(1-p)^3$.}
 \label{fig:perdas}
@@ -289,7 +289,7 @@ aparente}, justificando o severo estresse imposto à malha de confiabilidade do 
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig3_retransmissoes.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_retransmissoes.png}
 \caption{Ativação da lógica de confiabilidade R-UDP: disparos de \emph{timeouts} acionando o 
 recuo da janela Go-Back-N.}
 \label{fig:retx}
@@ -297,7 +297,7 @@ recuo da janela Go-Back-N.}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig4_overhead.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_overhead.png}
 \caption{\emph{Overhead} bruto de tráfego do R-UDP, evidenciando o custo da redundância 
 inerente à estratégia Go-Back-N.}
 \label{fig:overhead}
@@ -324,7 +324,7 @@ telemetria absoluta dos enlaces provida pelo analisador de pacotes (\texttt{tcpd
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig5_pacotes_rede.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_pacotes_rede.png}
 \caption{O comportamento oculto do TCP exposto: contagem bruta de tráfego 
 cliente$\rightarrow$servidor registrada pelo \texttt{tcpdump}.}
 \label{fig:pacotes}
@@ -337,7 +337,7 @@ massivas também no \emph{kernel}, independentemente do que o \emph{Socket} deci
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\textwidth]{imgs/fig6_crossval.png}
+\includegraphics[width=0.85\textwidth]{imgs/fase1_crossval.png}
 \caption{Dispersão para validação cruzada do tempo de transferência (Aplicação \emph{vs.} \texttt{tcpdump}). 
 A convergência para a bissetriz $y = x$ chancela a precisão dos registros internos.}
 \label{fig:crossval}

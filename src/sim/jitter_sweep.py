@@ -137,7 +137,7 @@ def build_figure(
 
 
 def generate_figure(
-    output_path: str = "results/figures/fig_jitter.png",
+    output_path: str = "results/figures/fase2_jitter.png",
     jitters: list[float] | None = None,
     reps: int = 40,
     seed: int | None = 1,

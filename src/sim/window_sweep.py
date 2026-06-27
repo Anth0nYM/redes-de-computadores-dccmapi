@@ -142,7 +142,7 @@ def build_figure(
 
 
 def generate_figure(
-    output_path: str = "results/figures/fig_janela.png",
+    output_path: str = "results/figures/fase2_janela.png",
     bandwidth_KBps: float = 2000.0,
     windows: list[int] | None = None,
     reps: int = 5,
