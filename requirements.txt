@@ -9,3 +9,7 @@ scipy>=1.12
 # Exportar figuras Plotly para PNG. kaleido>=1.0 requer um Chrome headless:
 # rode `plotly_get_chrome` uma vez (no Colab o Chrome já existe).
 kaleido>=1.0
+# Notebook local: nbformat é exigido pelo plotly `fig.show()` (renderização mime);
+# ipykernel registra o kernel do .venv no Jupyter/VS Code. No Colab ambos já existem.
+nbformat>=5.0
+ipykernel>=6.0
