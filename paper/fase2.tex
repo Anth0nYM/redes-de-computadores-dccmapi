@@ -6,19 +6,21 @@
 \usepackage[brazil]{babel}
 \usepackage{amsmath}
 \usepackage{booktabs}
+\usepackage{placeins}
 
 \sloppy
 
-\title{Da Prática à Modelagem Estocástica: Validação Cruzada de um\\
-Protocolo R-UDP Go-Back-N entre Emulação Real e\\
-Simulação de Eventos Discretos}
+\title{Da Prática à Modelagem Estocástica: Validação Cruzada de um Protocolo R-UDP Go-Back-N entre Emulação e Simulação de Eventos Discretos
+}
 
 \author{Anthony Irlan Marques Luz\inst{1}}
 
 \address{Programa de Pós-Graduação em Ciência da Computação (PPGCC)\\
   Universidade Federal do Piauí (UFPI) -- Campus Senador Helvídio Nunes de Barros\\
   Picos (PI) -- Brasil
-  \email{marquesanthony62@gmail.com}
+  \email{marquesanthony62@gmail.com}\\
+  Vídeo de apresentação: \url{https://youtube.com/PLACEHOLDER-VIDEO}\\
+  Repositório: \url{https://github.com/Anth0nYM/redes-de-computadores-dccmapi}
 }
 
 \begin{document}
@@ -26,110 +28,121 @@ Simulação de Eventos Discretos}
 \maketitle
 
 \begin{abstract}
-  We develop and validate a stochastic discrete-event model, written in SimPy, of a
-  reliable file-transfer protocol (R-UDP) built on UDP with a Go-Back-N sliding window.
-  The model mirrors a real, Dockerized system previously measured under network
-  degradation emulated with \texttt{tc/netem} (three loss/delay scenarios). The channel
-  is a Normal one-way delay with Bernoulli per-block loss, whose effective rate accounts
-  for IP fragmentation; the protocol is an event-driven Go-Back-N engine whose transfer
-  time and retransmission counts \emph{emerge} from the scheduled event timeline, with no
-  fitting factors. Across a 200-fold range of transfer times (0.67~s to 145~s) the
-  simulator reproduces the real measurements within $1.0$--$7.4\%$; a 95\% bootstrap
-  confidence interval over 30 repetitions brackets the high-loss scenario and exposes a
-  small, mechanistically explained bias in the others. We then exercise the model through
-  the ten validation tasks of the assignment --- throughput versus file size, window
-  sensitivity, RTT validation, jitter impact, a 25\% loss stress forecast and DATA/ACK
-  efficiency --- obtaining results consistent with closed-form bounds (the window/RTT
-  ceiling, the bandwidth-delay-product knee, and the $1/(1-p)$ efficiency law). The study
-  quantifies where a parsimonious stochastic model faithfully tracks network practice and
-  where it departs from it.
+  This paper develops and validates a stochastic discrete-event model, implemented in
+  SimPy, for a reliable file-transfer protocol over UDP using a Go-Back-N sliding window.
+  The model reproduces the structure of a Docker-based experimental system previously
+  evaluated under network degradation emulated with \texttt{tc/netem} in three loss and
+  delay scenarios. The channel is represented by a Normal one-way delay and Bernoulli
+  per-block loss, with an effective loss rate adjusted for IP fragmentation. The protocol
+  is modeled as an event-driven Go-Back-N engine in which transfer time and retransmission
+  counts result from the scheduled event timeline, without fitting factors. Across a
+  200-fold range of transfer times, from 0.67~s to 145~s, the simulator reproduces the
+  empirical measurements with relative errors between $1.0$ and $7.4\%$. A 95\% bootstrap
+  confidence interval over 30 repetitions contains the empirical result in the high-loss
+  scenario and reveals small systematic deviations in the others. The model is then
+  evaluated through ten validation tasks, including throughput as a function of file size,
+  window-size sensitivity, RTT validation, jitter impact, a 25\% loss stress scenario and
+  DATA/ACK efficiency. The results are consistent with closed-form bounds, including the
+  window/RTT ceiling, the bandwidth-delay product knee and the $1/(1-p)$ efficiency law.
+  Overall, the study indicates in which regimes a parsimonious stochastic model is able to
+  approximate network practice and where relevant discrepancies remain.
 \end{abstract}
 
 \begin{resumo}
-  Desenvolvemos e validamos um modelo estocástico de eventos discretos, escrito em SimPy,
-  de um protocolo confiável de transferência de arquivos (R-UDP) construído sobre o UDP
-  com janela deslizante Go-Back-N. O modelo espelha um sistema real, conteinerizado em
-  Docker, previamente medido sob degradação de rede emulada com \texttt{tc/netem} (três
-  cenários de perda e atraso). O canal é um atraso unidirecional Normal com perda de
-  Bernoulli por bloco, cuja taxa efetiva contabiliza a fragmentação IP; o protocolo é um
-  motor Go-Back-N orientado a eventos cujo tempo de transferência e número de
-  retransmissões \emph{emergem} da linha do tempo de eventos agendados, sem fatores de
-  ajuste. Ao longo de uma faixa de 200 vezes nos tempos de transferência (0,67~s a
-  145~s), o simulador reproduz as medições reais dentro de $1{,}0$--$7{,}4\%$; um intervalo de
-  confiança \emph{bootstrap} de 95\% sobre 30 repetições cobre o cenário de alta perda e
-  expõe um pequeno viés, explicado mecanicamente, nos demais. Em seguida, exercitamos o
-  modelo nas dez tarefas de validação do enunciado --- vazão \emph{versus} tamanho de
-  arquivo, sensibilidade da janela, validação de RTT, impacto do \emph{jitter}, previsão
-  de estresse a 25\% de perda e eficiência DADOS/ACK --- com resultados coerentes com
-  limites em forma fechada (o teto janela/RTT, o joelho do produto banda-atraso e a lei de
-  eficiência $1/(1-p)$). O estudo quantifica onde um modelo estocástico parcimonioso
-  acompanha fielmente a prática de rede e onde dela se afasta.
+  Este artigo desenvolve e valida um modelo estocástico de eventos discretos, implementado
+  em SimPy, para um protocolo confiável de transferência de arquivos sobre UDP com janela
+  deslizante Go-Back-N. O modelo reproduz a estrutura de um sistema experimental baseado
+  em Docker, previamente avaliado sob degradação de rede emulada com \texttt{tc/netem} em
+  três cenários de perda e atraso. O canal é representado por atraso unidirecional Normal
+  e perda de Bernoulli por bloco, com taxa de perda efetiva ajustada para considerar a
+  fragmentação IP. O protocolo é modelado como um motor Go-Back-N orientado a eventos, no
+  qual o tempo de transferência e a contagem de retransmissões resultam da linha do tempo
+  de eventos agendados, sem fatores de ajuste. Ao longo de uma faixa de 200 vezes nos
+  tempos de transferência, de 0,67~s a 145~s, o simulador reproduz as medições empíricas
+  com erros relativos entre $1{,}0$ e $7{,}4\%$. Um intervalo de confiança bootstrap de
+  95\%, estimado sobre 30 repetições, contém o resultado empírico no cenário de alta perda
+  e evidencia pequenos desvios sistemáticos nos demais. Em seguida, o modelo é avaliado
+  por meio de dez tarefas de validação, incluindo vazão em função do tamanho do arquivo,
+  sensibilidade ao tamanho da janela, validação de RTT, impacto do jitter, cenário de
+  estresse com 25\% de perda e eficiência DADOS/ACK. Os resultados são compatíveis com
+  limites em forma fechada, como o teto janela/RTT, o joelho do produto banda-atraso e a
+  lei de eficiência $1/(1-p)$. Em conjunto, o estudo indica em quais regimes um modelo
+  estocástico parcimonioso aproxima a prática de rede e onde persistem discrepâncias
+  relevantes.
 \end{resumo}
 
 \section{Introdução}
 
-A entrega da confiabilidade na camada de transporte pode ser obtida transferindo a
-responsabilidade ao núcleo do sistema operacional (TCP)~\cite{rfc793} ou reconstruindo-a
-em espaço de usuário sobre o UDP~\cite{rfc768}. A segunda abordagem --- um \emph{Reliable
-UDP} (R-UDP) com janela deslizante Go-Back-N~\cite{kurose2017} --- expõe explicitamente
-cada mecanismo de recuperação de erros, tornando-os mensuráveis. Em uma etapa anterior
-deste projeto, um sistema cliente/servidor com esse desenho foi implementado, executado em
-contêineres Docker e medido sob degradação de rede emulada com \texttt{tc/netem}, gerando
-um conjunto de medições empíricas que serve de \emph{linha de base} para este trabalho.
+A confiabilidade na camada de transporte pode ser provida pelo núcleo do sistema
+operacional, como ocorre no TCP~\cite{rfc793}, ou implementada em espaço de usuário sobre o
+UDP~\cite{rfc768}. A segunda abordagem, usualmente denominada Reliable UDP (R-UDP), permite
+observar de forma explícita os mecanismos de controle de erro, confirmação e
+retransmissão. Neste trabalho, considera-se um protocolo R-UDP com janela deslizante
+Go-Back-N~\cite{kurose2017}, cuja dinâmica torna mensuráveis os efeitos de perda, atraso,
+timeout e tamanho de janela sobre a transferência de arquivos.
 
-Este artigo aborda uma pergunta distinta e complementar: \emph{um modelo estocástico
-parcimonioso, de eventos discretos, é capaz de reproduzir o comportamento daquele sistema
-real, e o que o resíduo de discrepância nos ensina?} A motivação é dupla. Primeiro, um
-simulador calibrado permite extrapolar, de forma barata e reprodutível, para pontos de
-operação que não foram medidos --- outros tamanhos de arquivo, outras profundidades de
-janela, outros regimes de perda --- substituindo baterias experimentais custosas por
-varreduras paramétricas~\cite{law2015,jain1991}. Segundo, e mais importante do ponto de
-vista científico, o confronto sistemático entre o modelo e a realidade permite
-\emph{entender as discrepâncias entre a teoria estocástica e a prática de rede}, que é o
-objetivo declarado deste projeto.
+Em uma etapa anterior do projeto, foi implementado um sistema cliente/servidor com esse
+protocolo. O sistema foi executado em contêineres Docker e avaliado sob degradação de rede
+emulada com \texttt{tc/netem}, produzindo uma linha de base empírica para três cenários de
+perda e atraso. A partir desse conjunto de medições, este artigo investiga se um modelo
+estocástico de eventos discretos, suficientemente simples e parametrizado apenas por
+quantidades físicas observáveis, é capaz de reproduzir o comportamento do sistema real.
 
-As contribuições são: \textbf{(a)} um modelo de eventos discretos do Go-Back-N sobre UDP,
-implementado em SimPy~\cite{simpy}, no qual o tempo de transferência e as retransmissões
-\emph{emergem} da linha do tempo de eventos, sem multiplicadores de ajuste; \textbf{(b)} a
-calibração do modelo contra a linha de base real ao longo de uma faixa de 200 vezes,
-com erro de $1{,}0$ a $7{,}4\%$ e intervalo de confiança por \emph{bootstrap}; \textbf{(c)} a
-execução das dez tarefas de validação do enunciado (Seção~\ref{sec:validacao}), cada uma
-cruzada com um limite em forma fechada; e \textbf{(d)} uma prestação de contas honesta de
-\emph{onde} o modelo e o sistema real divergem e \emph{por quê} (Seção~\ref{sec:discussao}).
+A motivação para essa comparação é dupla. Em primeiro lugar, um simulador validado permite
+explorar pontos de operação não medidos experimentalmente, como diferentes tamanhos de
+arquivo, profundidades de janela e regimes de perda. Essa possibilidade reduz o custo de
+novas baterias experimentais e favorece a reprodutibilidade das análises
+paramétricas~\cite{law2015,jain1991}. Em segundo lugar, o confronto entre simulação e
+execução real permite identificar discrepâncias entre a teoria estocástica adotada no
+modelo e o comportamento observado em ambiente de rede, aspecto central para avaliar os
+limites da própria modelagem.
+
+Este trabalho apresenta quatro contribuições principais. A primeira é a construção de um
+modelo de eventos discretos para Go-Back-N sobre UDP, implementado em SimPy~\cite{simpy},
+no qual o tempo de transferência e as retransmissões decorrem da dinâmica dos eventos
+simulados. A segunda é a calibração do modelo contra a linha de base empírica, em uma faixa
+de variação de aproximadamente 200 vezes no tempo de transferência, com erro entre
+$1{,}0$ e $7{,}4\%$ e análise por intervalo de confiança bootstrap. A terceira é a execução
+das dez tarefas de validação propostas, cada uma confrontada com um limite analítico ou
+propriedade esperada do protocolo. A quarta é a análise das discrepâncias residuais entre
+o modelo e o sistema real, com indicação dos fatores que explicam os desvios observados.
 
 \section{Sistema de Referência e Linha de Base Empírica}
 \label{sec:referencia}
 
-O modelo desenvolvido aqui espelha o sistema R-UDP real cujos parâmetros e medições
-resumimos nesta seção; são eles a \emph{verdade de solo} que o simulador busca reproduzir.
+O modelo desenvolvido neste artigo reproduz o sistema R-UDP real descrito a seguir. Seus
+parâmetros e medições constituem a referência empírica utilizada para avaliar a fidelidade
+do simulador.
 
-\textbf{O protocolo.} O R-UDP opera em fluxo unidirecional cliente$\rightarrow$servidor,
-com cabeçalho próprio de 16 bytes (tipo, sequência, ACK, janela, comprimento e
-\emph{checksum} CRC-16), \emph{handshake} SYN/SYN-ACK e encerramento FIN/FIN-ACK. A
-confiabilidade é construída sobre Go-Back-N com janela $N = 8$, ACKs cumulativos e um
-\emph{timeout} fixo de $0{,}5$~s que dispara a retransmissão da janela a partir do último
-bloco não confirmado. A integridade é atestada por um \emph{checksum} MD5 do arquivo
-completo. A carga de teste é um arquivo de $1\,048\,576$ bytes (1~MiB), particionado em
-$256$ blocos de $4096$ bytes.
+O protocolo opera em fluxo unidirecional cliente$\rightarrow$servidor e utiliza um
+cabeçalho próprio de 16 bytes, composto por tipo, número de sequência, confirmação, janela,
+comprimento e checksum CRC-16. A conexão inclui handshake SYN/SYN-ACK e encerramento
+FIN/FIN-ACK. A confiabilidade é implementada com Go-Back-N, janela $N = 8$, confirmações
+cumulativas e timeout fixo de $0{,}5$~s. Quando esse temporizador expira, o emissor
+retransmite a janela a partir do bloco mais antigo ainda não confirmado. A integridade do
+arquivo completo é verificada por checksum MD5. A carga de teste consiste em um arquivo de
+$1\,048\,576$ bytes, correspondente a 1~MiB, particionado em $256$ blocos de $4096$ bytes.
 
-\textbf{Ambiente e cenários.} Os ensaios reais ocorreram em pares de contêineres
-Ubuntu~22.04 em uma rede \emph{bridge} isolada~\cite{merkel2014}, com a degradação injetada
-por \texttt{tc/netem}~\cite{hemminger2005} em três cenários progressivos
-(Tabela~\ref{tab:cenarios}). A perda foi configurada exclusivamente no caminho de DADOS
-(\emph{egress} do cliente) e o atraso aplicado simetricamente.
+Os ensaios reais foram conduzidos em pares de contêineres Ubuntu~22.04 conectados por uma
+rede bridge isolada~\cite{merkel2014}. A degradação foi injetada com
+\texttt{tc/netem}~\cite{hemminger2005} em três cenários progressivos, conforme a
+Tabela~\ref{tab:cenarios}. A perda foi configurada exclusivamente no caminho de DADOS,
+correspondente ao egress do cliente, enquanto o atraso foi aplicado de forma simétrica.
 
-\textbf{Perda efetiva por fragmentação.} Cada datagrama de DADOS possui $4112$ bytes
-($4096$ do bloco mais $16$ do cabeçalho), excedendo a MTU Ethernet padrão de $1500$ bytes;
-o IP o fragmenta em $3$ pacotes. Como o \texttt{netem} descarta pacotes IP de forma
-independente com probabilidade $p$, o datagrama só é entregue se os três fragmentos
-sobreviverem. A perda efetiva \emph{por bloco} sentida pela aplicação é, portanto,
+A fragmentação IP tem papel central na interpretação da perda observada. Cada datagrama de
+DADOS possui $4112$ bytes, sendo $4096$ bytes de carga útil e $16$ bytes de cabeçalho. Como
+esse tamanho excede a MTU Ethernet padrão de $1500$ bytes, o datagrama é fragmentado em
+três pacotes IP. Considerando que o \texttt{netem} descarta pacotes IP de forma
+independente com probabilidade $p$, o datagrama só é entregue se todos os seus fragmentos
+sobreviverem. Assim, a perda efetiva por bloco percebida pela aplicação é dada por
 \begin{equation}
   p_{\text{ef}} = 1 - (1-p)^3,
   \label{eq:frag}
 \end{equation}
-o que converte as perdas brutas de $10\%$ e $20\%$ em $27{,}1\%$ e $48{,}8\%$,
-respectivamente --- valores confirmados empiricamente na etapa real. A
-Equação~\ref{eq:frag} é o elo que alimenta o modelo de perda do simulador.
+
+o que converte perdas brutas de $10\%$ e $20\%$ em perdas efetivas de $27{,}1\%$ e
+$48{,}8\%$, respectivamente. Esses valores foram confirmados empiricamente na etapa real e
+alimentam o modelo de perda do simulador.
 
 \begin{table}[ht]
 \centering
@@ -147,11 +160,11 @@ C & 20\% & 100~ms & 200~ms & 48{,}8\% \\
 \end{tabular}
 \end{table}
 
-\textbf{Linha de base.} A Tabela~\ref{tab:baseline} consolida as medições reais do R-UDP
-(médias de $n=10$ repetições por cenário), que constituem os pontos-âncora da calibração.
-Note-se a amplitude: o tempo de transferência cresce de sub-segundo (A) a quase
-$2{,}5$~minutos (C), e o \emph{overhead} de dados do Go-Back-N escala a $8{,}4\times$ sob
-perda severa.
+A Tabela~\ref{tab:baseline} consolida as medições reais do R-UDP, calculadas como médias
+de $n=10$ repetições por cenário. Esses resultados constituem os pontos de calibração do
+modelo. Observa-se uma ampla variação no tempo de transferência, que cresce de menos de um
+segundo no cenário A para quase $2{,}5$ minutos no cenário C. Também se observa aumento
+expressivo do overhead de dados do Go-Back-N, que atinge $8{,}4\times$ sob perda severa.
 
 \begin{table}[ht]
 \centering
@@ -172,130 +185,145 @@ C & 144{,}613 & 7{,}1  & 238{,}5 & 8{,}4$\times$ \\
 \section{Modelagem Estocástica de Eventos Discretos}
 \label{sec:modelo}
 
-\subsection{Por que um modelo de eventos discretos}
+\subsection{Justificativa para o modelo de eventos discretos}
 
-Em uma simulação de eventos discretos (DES), o estado do sistema só muda em instantes
-pontuais associados a eventos agendados, e o relógio salta de evento em
-evento~\cite{law2015}. Adotamos o arcabouço SimPy~\cite{simpy}, no qual cada transferência
-é conduzida por três classes de eventos reais --- a \emph{chegada} de um pacote de DADOS,
-a \emph{chegada} de um ACK e o disparo do \emph{timer} de retransmissão. A consequência
-metodológica central é que o tempo de transferência e a contagem de retransmissões não são
-calculados por uma fórmula fechada inserida \emph{a posteriori}: eles \emph{emergem} do
-entrelaçamento dos eventos. Essa escolha distingue o modelo de uma aproximação síncrona
-por rodadas, que não capturaria a sobreposição dos pacotes em voo de uma janela, o
-ritmo imposto pelos ACKs cumulativos nem as cascatas de \emph{timeout}.
+Em uma simulação de eventos discretos, o estado do sistema é alterado apenas em instantes
+associados a eventos agendados, e o relógio da simulação avança diretamente de um evento
+para o próximo~\cite{law2015}. Neste trabalho, adota-se o SimPy~\cite{simpy} para
+representar a transferência por meio de três classes de eventos: chegada de pacote de
+DADOS, chegada de ACK e disparo do temporizador de retransmissão. Com essa representação,
+o tempo total de transferência e a contagem de retransmissões não são calculados por uma
+expressão fechada posterior à simulação, mas resultam do encadeamento dos eventos.
+
+Essa escolha evita uma aproximação síncrona por rodadas, que seria menos adequada para
+representar a sobreposição de pacotes em voo, o avanço da janela por ACKs cumulativos e as
+cascatas de timeout produzidas pelo Go-Back-N. O modelo, portanto, busca preservar a
+dinâmica temporal essencial do protocolo sem recorrer a multiplicadores empíricos de
+ajuste.
 
 \subsection{Modelo de canal}
 \label{sec:canal}
 
-O canal é caracterizado por dois processos estocásticos independentes. O atraso
-unidirecional de cada pacote é amostrado de uma distribuição Normal,
+O canal é definido por dois processos estocásticos independentes. O atraso unidirecional
+de cada pacote é amostrado de uma distribuição Normal,
 \begin{equation}
   D \sim \mathcal{N}(\mu,\,\sigma^2), \qquad \text{RTT} = 2\mu,
   \label{eq:delay}
 \end{equation}
-em que $\mu$ é o atraso médio do cenário (Tabela~\ref{tab:cenarios}) e $\sigma$ é o
-\emph{jitter}; amostras negativas são saturadas em zero. A perda atua no nível do bloco
-como um processo de Bernoulli: cada pacote de DADOS é descartado de forma independente com
-probabilidade $p_{\text{ef}}$ da Equação~\ref{eq:frag}. Os ACKs são modelados como
-entregues de forma confiável; essa simplificação --- cuja justificativa e custo
-discutimos na Seção~\ref{sec:discussao} --- apoia-se em que a semântica cumulativa do
-Go-Back-N já recupera ACKs atrasados e em que $p_{\text{ef}}$ encapsula a perda efetiva do
-caminho de DADOS.
 
-Um detalhe é decisivo para a fidelidade: o enlace \emph{preserva a ordem} (FIFO). Um
-enlace físico não reordena pacotes enviados em sequência, ainda que o atraso por pacote
-varie; impomos isso saturando os instantes de chegada para que sejam monotônicos. Sem essa
-restrição, o \emph{jitter} reordenaria os pacotes de uma janela e provocaria
-\emph{timeouts} espúrios, inflando artificialmente as retransmissões.
+em que $\mu$ representa o atraso médio do cenário, conforme a Tabela~\ref{tab:cenarios}, e
+$\sigma$ representa o jitter. Amostras negativas são truncadas em zero para manter a
+plausibilidade física dos atrasos. A perda atua no nível do bloco como um processo de
+Bernoulli: cada pacote de DADOS é descartado independentemente com probabilidade
+$p_{\text{ef}}$, definida na Equação~\ref{eq:frag}.
+
+Os ACKs são modelados como entregues de forma confiável. Essa simplificação é discutida na
+Seção~\ref{sec:discussao}. Ela se apoia no fato de que a semântica cumulativa do
+Go-Back-N atenua a perda ou o atraso de confirmações individuais e no fato de que
+$p_{\text{ef}}$ já incorpora a perda efetiva observada no caminho de DADOS.
+
+Outro aspecto relevante é a preservação da ordem de entrega no enlace. Um enlace físico
+não deve reordenar pacotes enviados sequencialmente apenas em função de variações de
+atraso. Por isso, os instantes de chegada são ajustados para manter monotonicidade. Sem
+essa restrição, o jitter poderia introduzir reordenações artificiais dentro da janela,
+gerando timeouts espúrios e inflando indevidamente o número de retransmissões.
 
 \subsection{Motor Go-Back-N orientado a eventos}
 \label{sec:motor}
 
-O motor reproduz o Go-Back-N canônico. Um único \emph{timer} de retransmissão guarda o
-pacote mais antigo não confirmado (a \emph{base} da janela). O processo emissor preenche a
-janela e então aguarda o primeiro entre dois eventos: a chegada de um ACK que avança a
-base (deslizando a janela e reiniciando o \emph{timer}) ou o disparo do \emph{timeout}
-(que faz o emissor \emph{retroceder a N} e reenviar a janela inteira). O receptor aceita
-pacotes em ordem e responde a cada DADO que chega com um ACK cumulativo. Para evitar
-condições de corrida quando uma janela inteira de ACKs chega no mesmo instante simulado, o
-emissor renova o evento de espera a cada iteração, em vez de interromper processos.
+O motor implementa o comportamento canônico do Go-Back-N. Um único temporizador de
+retransmissão é associado ao pacote mais antigo ainda não confirmado, isto é, à base da
+janela. O emissor preenche a janela e aguarda o primeiro de dois eventos possíveis: a
+chegada de um ACK que avance a base ou o disparo do timeout. No primeiro caso, a janela é
+deslocada e o temporizador é reiniciado. No segundo, o emissor retransmite todos os blocos
+a partir da base. O receptor, por sua vez, aceita apenas pacotes em ordem e responde a
+cada pacote de DADOS recebido com um ACK cumulativo.
 
-Opcionalmente, o motor serializa os pacotes no enlace gargalo, espaçando transmissões
-consecutivas em $L/B$ segundos (bloco $L$, banda $B$); isso impõe um teto de taxa e é
-usado apenas no estudo de sensibilidade da janela (Seção~\ref{sec:janela}). Por padrão a
-banda é infinita (regime limitado por RTT), o que mantém a calibração inalterada.
+Para evitar condições de corrida quando múltiplos ACKs chegam no mesmo instante simulado,
+o evento de espera do emissor é renovado a cada iteração. Essa estratégia substitui a
+interrupção direta de processos e torna a execução mais estável em cenários com eventos
+coincidentes.
 
-\subsection{Mapeamento real{\,}$\rightarrow${\,}simulado e verificação}
+O motor também permite serializar pacotes em um enlace gargalo, espaçando transmissões
+consecutivas em $L/B$ segundos, em que $L$ é o tamanho do bloco e $B$ é a banda disponível.
+Esse mecanismo impõe um teto de taxa e é utilizado apenas no estudo de sensibilidade da
+janela, descrito na Seção~\ref{sec:janela}. Na calibração principal, considera-se banda
+infinita, caracterizando um regime limitado por RTT.
+
+\subsection{Mapeamento entre o sistema real e o modelo simulado}
 \label{sec:mapeamento}
 
-O modelo recebe exatamente os parâmetros físicos do sistema real: janela $N=8$,
-\emph{timeout} de $0{,}5$~s, blocos de $4096$ bytes, $256$ blocos por arquivo, atraso
-$\mu$ tal que $\text{RTT}=2\mu$ corresponde aos $20/100/200$~ms medidos por \texttt{tcpdump}
-na etapa real (o que valida o RTT, tarefa~6) e perda $p_{\text{ef}}$ da
-Equação~\ref{eq:frag}. \emph{Nenhum} multiplicador de ajuste é aplicado. A implementação
-foi construída sob desenvolvimento guiado por testes, com $51$ testes unitários que fixam
-as estatísticas do canal (taxa de perda empírica $\approx p_{\text{ef}}$) e os invariantes
-do Go-Back-N (256 blocos íntegros; zero retransmissões na ausência de perda). A
-reprodutibilidade dos resultados numéricos a seguir é garantida por sementes fixas dos
-geradores pseudoaleatórios.
+O modelo utiliza diretamente os parâmetros físicos do sistema real: janela $N=8$, timeout
+de $0{,}5$~s, blocos de $4096$ bytes, $256$ blocos por arquivo, atraso $\mu$ definido de
+modo que $\text{RTT}=2\mu$ corresponda aos valores de $20$, $100$ e $200$~ms medidos por
+\texttt{tcpdump}, e perda $p_{\text{ef}}$ calculada pela Equação~\ref{eq:frag}. Nenhum
+multiplicador de ajuste é aplicado.
+
+A implementação foi construída com desenvolvimento guiado por testes. Ao todo, 51 testes
+unitários verificam propriedades estatísticas do canal, como a proximidade entre a taxa de
+perda empírica e $p_{\text{ef}}$, e invariantes do Go-Back-N, como a entrega íntegra dos
+256 blocos e a ausência de retransmissões quando não há perda. A reprodutibilidade dos
+resultados numéricos é assegurada por sementes fixas dos geradores pseudoaleatórios.
 
 \section{Validação Experimental: as Dez Tarefas}
 \label{sec:validacao}
 
-A Tabela~\ref{tab:tarefas} mapeia as dez tarefas de validação do enunciado às subseções a
-seguir. As tarefas de canal (1, 2), \emph{timeout} (3) e RTT (6) são aferidas em conjunto
-na calibração (Seção~\ref{sec:calibracao}); as demais são varreduras paramétricas
-ancoradas no ponto de operação real.
+A Tabela~\ref{tab:tarefas} relaciona as dez tarefas de validação às subseções em que são
+avaliadas. As tarefas relacionadas ao canal, ao timeout e ao RTT são tratadas em conjunto
+na calibração. As demais correspondem a varreduras paramétricas ancoradas nos pontos de
+operação do sistema real.
 
 \begin{table}[ht]
 \centering
-\caption{Mapeamento das dez tarefas de validação (\S3.1 do enunciado) às seções.}
+\caption{Mapeamento das dez tarefas de validação às seções correspondentes.}
 \label{tab:tarefas}
 \begin{tabular}{lll}
 \toprule
 \textbf{\#} & \textbf{Tarefa} & \textbf{Seção} \\
 \midrule
-1  & Modelagem de atraso (Normal)           & \ref{sec:canal}, \ref{sec:calibracao} \\
-2  & Perda de Bernoulli (validada vs.\ \texttt{tc}) & \ref{sec:canal}, \ref{sec:calibracao} \\
-3  & Simulação de \emph{timeout}/retransmissão & \ref{sec:motor}, \ref{sec:calibracao} \\
-4  & Curva de vazão (1--100~MB)             & \ref{sec:vazao} \\
-5  & Sensibilidade da janela ($N$)          & \ref{sec:janela} \\
-6  & Validação de RTT                       & \ref{sec:mapeamento}, \ref{sec:calibracao} \\
-7  & Impacto do \emph{jitter}               & \ref{sec:jitter} \\
-8  & Cenário de estresse (25\% de perda)    & \ref{sec:estresse} \\
-9  & Análise de eficiência (DADOS/ACK)      & \ref{sec:eficiencia} \\
-10 & Convergência estatística (IC 95\%)     & \ref{sec:convergencia} \\
+1  & Modelagem de atraso Normal             & \ref{sec:canal}, \ref{sec:calibracao} \\
+2  & Perda de Bernoulli validada contra \texttt{tc} & \ref{sec:canal}, \ref{sec:calibracao} \\
+3  & Simulação de timeout e retransmissão   & \ref{sec:motor}, \ref{sec:calibracao} \\
+4  & Curva de vazão entre 1 e 100~MB         & \ref{sec:vazao} \\
+5  & Sensibilidade ao tamanho da janela $N$  & \ref{sec:janela} \\
+6  & Validação de RTT                        & \ref{sec:mapeamento}, \ref{sec:calibracao} \\
+7  & Impacto do jitter                       & \ref{sec:jitter} \\
+8  & Cenário de estresse com 25\% de perda   & \ref{sec:estresse} \\
+9  & Análise de eficiência DADOS/ACK         & \ref{sec:eficiencia} \\
+10 & Convergência estatística com IC 95\%    & \ref{sec:convergencia} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Calibração: atraso, perda, \emph{timeout} e RTT contra o sistema real}
+\subsection{Calibração: atraso, perda, timeout e RTT}
 \label{sec:calibracao}
 
-Por construção, o canal reproduz os RTTs medidos ($20/100/200$~ms, tarefa~6). Alimentado
-com a perda efetiva $p_{\text{ef}}$ (tarefa~2) e o \emph{timeout} de $0{,}5$~s (tarefa~3),
-o modelo produz tempos e retransmissões que comparamos diretamente à linha de base real.
-A correção do modelo de perda é dupla: a taxa de descarte empírica do canal coincide com
-$p_{\text{ef}}$ (testada unitariamente), e o próprio $p_{\text{ef}}$ é a perda efetiva que
-o \texttt{tc/netem} produziu no sistema real (Equação~\ref{eq:frag}).
+Por construção, o canal reproduz os RTTs medidos nos três cenários: $20$, $100$ e
+$200$~ms. Com a perda efetiva $p_{\text{ef}}$ e o timeout de $0{,}5$~s, o modelo produz
+tempos de transferência e contagens de retransmissão que podem ser comparados diretamente
+à linha de base real. A validação do modelo de perda ocorre em dois níveis: a taxa de
+descarte empírica do canal simulado coincide com $p_{\text{ef}}$, conforme verificado em
+testes unitários, e o próprio $p_{\text{ef}}$ corresponde à perda efetiva observada no
+sistema real após a fragmentação IP.
 
-A Tabela~\ref{tab:calibracao} resume o confronto (30 repetições por cenário, semente
-fixa). O simulador acompanha a realidade ao longo de uma faixa de $200\times$ no tempo de
-transferência, com erro relativo de $-1{,}0\%$ (A), $+7{,}4\%$ (B) e $+2{,}9\%$ (C); as
-retransmissões emergentes ($0$, $98$, $246$) seguem de perto as reais ($0$, $91$, $238$).
-A natureza e a origem dos resíduos são analisadas na Seção~\ref{sec:discussao}.
+A Tabela~\ref{tab:calibracao} resume a comparação, considerando 30 repetições por cenário
+com sementes fixas. O simulador acompanha a realidade ao longo de uma faixa de
+aproximadamente $200\times$ no tempo de transferência. Os erros relativos foram de
+$-1{,}0\%$ no cenário A, $+7{,}4\%$ no cenário B e $+2{,}9\%$ no cenário C. As
+retransmissões simuladas, de $0$, $98$ e $246$, permanecem próximas das medições reais, de
+$0$, $91$ e $238$, respectivamente. A origem dos resíduos é examinada na
+Seção~\ref{sec:discussao}.
 
 \begin{table}[ht]
 \centering
-\caption{Calibração e convergência: tempo de transferência (s) simulado \emph{vs.}\ real,
-30 repetições com semente fixa e IC 95\% por \emph{bootstrap}~\cite{efron1993}.}
+\caption{Calibração e convergência: tempo de transferência simulado em comparação ao real,
+com 30 repetições, semente fixa e IC 95\% por bootstrap~\cite{efron1993}.}
 \label{tab:calibracao}
 \small
 \begin{tabular}{ccccccc}
 \toprule
-\textbf{Cen.} & \textbf{Real (s)} & \textbf{Sim.\ (s)} & \textbf{IC 95\% (s)} &
-\textbf{Erro} & \textbf{Retx (R/S)} & \textbf{Cobre?} \\
+\textbf{Cen.} & \textbf{Real (s)} & \textbf{Sim. (s)} & \textbf{IC 95\% (s)} &
+\textbf{Erro} & \textbf{Retx (R/S)} & \textbf{Real no IC?} \\
 \midrule
 A & 0{,}676   & 0{,}669   & [0{,}668;\,0{,}671]     & $-1{,}0\%$ & 0{,}0 / 0{,}0     & não \\
 B & 53{,}165  & 57{,}088  & [55{,}197;\,58{,}942]   & $+7{,}4\%$ & 91{,}1 / 98{,}0  & não \\
@@ -307,205 +335,225 @@ C & 144{,}613 & 148{,}788 & [144{,}046;\,153{,}388] & $+2{,}9\%$ & 238{,}5 / 245
 \subsection{Convergência estatística}
 \label{sec:convergencia}
 
-Para a tarefa~10, executamos $\geq 30$ repetições por cenário e estimamos um intervalo de
-confiança de $95\%$ sobre a média do tempo de transferência pelo \emph{bootstrap}
-percentílico~\cite{efron1993}. A Figura~\ref{fig:convergencia} sobrepõe a média simulada
-(com as barras de IC) ao ponto real medido. O IC \emph{cobre} o valor real no cenário~C; em
-A e B o real cai por pouco fora de um IC muito estreito
-(Tabela~\ref{tab:calibracao}). Vale frisar a interpretação correta: como o desvio entre as
-$30$ repetições é pequeno frente à média, o IC é estreito, e o que o separa do ponto real
-não é ruído amostral, mas um \emph{viés sistemático} de poucos pontos percentuais --- que é
-justamente o objeto de interesse científico (Seção~\ref{sec:discussao}).
+Para avaliar a convergência estatística, foram executadas pelo menos 30 repetições por
+cenário. Em seguida, estimou-se um intervalo de confiança de 95\% para a média do tempo de
+transferência por meio do bootstrap percentílico~\cite{efron1993}. A
+Figura~\ref{fig:convergencia} compara a média simulada, acompanhada das barras de
+intervalo de confiança, ao valor real medido.
+
+O intervalo contém o valor real no cenário C. Nos cenários A e B, o valor real fica pouco
+fora do intervalo estimado. Como a variabilidade entre as 30 repetições é pequena em
+relação à média, os intervalos tornam-se estreitos. Dessa forma, a diferença observada não
+é atribuída principalmente ao ruído amostral, mas a um viés sistemático de pequena
+magnitude, analisado posteriormente na Seção~\ref{sec:discussao}.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\textwidth]{imgs/fase2_convergencia.png}
-\caption{Convergência (tarefa~10): tempo médio simulado com IC 95\% (\emph{bootstrap},
-$\geq 30$ repetições) \emph{vs.}\ o tempo real medido. O IC cobre o real em C; em A e B
-resta um pequeno viés sistemático.}
+\caption{Convergência estatística: tempo médio simulado com IC 95\% por bootstrap, em
+comparação ao tempo real medido. O intervalo contém o valor real no cenário C, enquanto A
+e B apresentam pequeno viés sistemático.}
 \label{fig:convergencia}
 \end{figure}
 
 \subsection{Curva de vazão}
 \label{sec:vazao}
 
-Um protocolo limitado pela janela tem vazão máxima $S_{\max} = N\,L/\text{RTT}$ (o emissor
-mantém no máximo $N$ pacotes de $L$ bytes em voo por RTT). Para arquivos pequenos, o RTT
-fixo de estabelecimento é uma fração grande da transferência, e a vazão fica abaixo do
-teto; à medida que o arquivo cresce, esse custo se dilui e a vazão satura no teto. A
-Figura~\ref{fig:vazao} mostra a varredura de $1$ a $100$~MB (tarefa~4). No cenário~A, a
-vazão satura em $\approx 97\%$ do teto janela/RTT ($1600$~KB/s), em coerência com a vazão
-real de $\approx 1515$~KB/s. No cenário~B, a vazão colapsa para $\approx 19$~KB/s, muito
-abaixo de seu próprio teto sem perdas ($320$~KB/s): sob perda, a vazão não é governada pela
-janela, mas pela penalidade de retrocesso do Go-Back-N.
+Em um protocolo limitado pela janela, a vazão máxima pode ser aproximada por
+$S_{\max} = N\,L/\text{RTT}$, pois o emissor mantém no máximo $N$ pacotes de $L$ bytes em
+voo por RTT. Para arquivos pequenos, o custo fixo de estabelecimento representa parcela
+significativa do tempo total, o que reduz a vazão efetiva. À medida que o tamanho do
+arquivo aumenta, esse custo é diluído e a vazão tende ao teto imposto pela relação entre
+janela e RTT.
+
+A Figura~\ref{fig:vazao} apresenta a varredura entre $1$ e $100$~MB. No cenário A, a vazão
+satura em aproximadamente $97\%$ do teto janela/RTT, estimado em $1600$~KB/s, resultado
+compatível com a vazão real de cerca de $1515$~KB/s. No cenário B, a vazão estabiliza em
+aproximadamente $19$~KB/s, valor muito inferior ao teto sem perdas de $320$~KB/s. Nesse
+regime, a perda passa a dominar o desempenho, e a vazão é limitada principalmente pelo
+custo dos retrocessos do Go-Back-N.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\textwidth]{imgs/fase2_vazao_tamanho.png}
-\caption{Vazão \emph{vs.}\ tamanho do arquivo (tarefa~4), janela $=8$. O cenário~A satura
-junto ao teto janela/RTT; o cenário~B, sob perda, estabiliza muito abaixo de seu teto sem
-perdas.}
+\caption{Vazão em função do tamanho do arquivo, com janela igual a 8. O cenário A satura
+próximo ao teto janela/RTT, enquanto o cenário B estabiliza em nível muito inferior devido
+ao impacto das perdas.}
 \label{fig:vazao}
 \end{figure}
 
-\subsection{Sensibilidade da janela}
+\subsection{Sensibilidade ao tamanho da janela}
 \label{sec:janela}
 
-Com uma banda gargalo finita, o tubo comporta $\text{BDP} = B\cdot\text{RTT}$ bytes, ou
-seja, $\text{BDP}/L$ pacotes. Abaixo dessa janela o protocolo é limitado pela janela e a
-vazão cresce linearmente com $N$; acima dela, o enlace é o gargalo e aumentar $N$ nada
-acrescenta. A curva tem, portanto, um \emph{joelho} em
+Quando há uma banda gargalo finita, o enlace comporta $\text{BDP} = B\cdot\text{RTT}$
+bytes em voo, isto é, $\text{BDP}/L$ pacotes. Abaixo desse ponto, o protocolo é limitado
+pela janela, e a vazão cresce aproximadamente de forma linear com $N$. Acima dele, o
+enlace passa a ser o principal gargalo, e aumentos adicionais de $N$ produzem ganhos
+marginais. O ponto de transição pode ser estimado por
 \begin{equation}
   N^{*} = \frac{\text{BDP}}{L} = \frac{B\cdot\text{RTT}}{L}.
   \label{eq:knee}
 \end{equation}
-Como o enlace de \emph{loopback} real não tinha limite de taxa apertado (era limitado pela
-janela), este estudo injeta um gargalo explícito para expor a saturação teórica
-(tarefa~5). Para $B = 2000$~KB/s e RTT $=20$~ms, a Equação~\ref{eq:knee} prevê
-$N^{*}=10$; a Figura~\ref{fig:janela} mostra a vazão crescendo linearmente até saturar na
-banda do enlace ($\approx 1986$~KB/s), com joelho medido em $N=12$ (a primeira janela a
-atingir $95\%$ do máximo), em concordância com a previsão.
+
+Como o enlace de loopback utilizado nos ensaios reais não impunha um limite de taxa
+apertado, este experimento introduz explicitamente um gargalo para evidenciar a saturação
+esperada. Para $B = 2000$~KB/s e RTT de $20$~ms, a Equação~\ref{eq:knee} prevê
+$N^{*}=10$. A Figura~\ref{fig:janela} mostra que a vazão cresce quase linearmente até
+atingir a saturação próxima à banda do enlace, em torno de $1986$~KB/s. O joelho medido
+ocorre em $N=12$, definido como a primeira janela capaz de alcançar $95\%$ da vazão máxima,
+o que é compatível com a previsão analítica.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\textwidth]{imgs/fase2_janela.png}
-\caption{Sensibilidade da janela $N$ (tarefa~5) sobre um enlace gargalo de $2000$~KB/s. A
-vazão cresce linearmente até o joelho $N^{*}=\text{BDP}/L=10$ e satura na banda do
+\caption{Sensibilidade ao tamanho da janela $N$ em enlace gargalo de $2000$~KB/s. A vazão
+cresce até o joelho previsto pelo produto banda-atraso e depois satura na banda do
 enlace.}
 \label{fig:janela}
 \end{figure}
 
-\subsection{Impacto do \emph{jitter}}
+\subsection{Impacto do jitter}
 \label{sec:jitter}
 
-O \emph{jitter} é o desvio-padrão $\sigma$ do atraso (Equação~\ref{eq:delay}). Variamos
-$\sigma$ de $1$ a $80$~ms em um canal \emph{sem perdas} (para que a dispersão isole o
-efeito do \emph{jitter}), com RTT nominal de $100$~ms, e reportamos a média e o
-desvio-padrão entre repetições do tempo de transferência (tarefa~7). A
-Figura~\ref{fig:jitter} mostra que o desvio cresce monotonicamente, de $0{,}002$~s
-($\sigma=1$~ms) a $0{,}19$~s ($\sigma=80$~ms). Observa-se um efeito secundário relevante: a
-\emph{média} também sobe (de $0{,}81$ a $1{,}96$~s), porque a preservação de ordem (FIFO)
-acopla a conclusão de cada rodada ao \emph{máximo} dos atrasos amostrados na janela, e a
-esperança desse máximo cresce com $\sigma$. O \emph{jitter}, portanto, infla não só a
+O jitter corresponde ao desvio-padrão $\sigma$ do atraso definido na
+Equação~\ref{eq:delay}. Para isolar seu efeito, variou-se $\sigma$ de $1$ a $80$~ms em um
+canal sem perdas, com RTT nominal de $100$~ms. Para cada configuração, reportaram-se a
+média e o desvio-padrão do tempo de transferência entre repetições.
+
+A Figura~\ref{fig:jitter} mostra aumento monotônico da dispersão, de $0{,}002$~s para
+$\sigma=1$~ms a $0{,}19$~s para $\sigma=80$~ms. Observa-se também aumento da média, de
+$0{,}81$~s para $1{,}96$~s. Esse comportamento decorre da preservação de ordem no enlace:
+a conclusão de cada rodada fica associada ao maior atraso observado entre os pacotes da
+janela, e a esperança desse máximo cresce com $\sigma$. Assim, o jitter eleva não apenas a
 variância, mas também a tendência central do tempo de transferência.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\textwidth]{imgs/fase2_jitter.png}
-\caption{Impacto do \emph{jitter} (tarefa~7) em canal sem perdas, RTT $100$~ms. A
-dispersão do tempo (barras $\pm 1\sigma$) cresce monotonicamente com o \emph{jitter}; a
-média também sobe, por acoplamento ao máximo dos atrasos da janela (FIFO).}
+\caption{Impacto do jitter em canal sem perdas, com RTT de $100$~ms. A dispersão do tempo
+de transferência cresce com $\sigma$, e a média também aumenta devido ao acoplamento com o
+maior atraso observado dentro da janela.}
 \label{fig:jitter}
 \end{figure}
 
-\subsection{Cenário de estresse a 25\% de perda}
+\subsection{Cenário de estresse com 25\% de perda}
 \label{sec:estresse}
 
-A tarefa~8 pede a previsão do tempo de transferência sob $25\%$ de perda \emph{bruta}.
-Como a perda configurada é por pacote IP, aplicamos a Equação~\ref{eq:frag}: $25\%$ bruto
-correspondem a $p_{\text{ef}} = 1-(0{,}75)^3 = 57{,}8\%$ de perda efetiva por bloco.
-Mantemos o atraso em $100$~ms (o do cenário~C) para isolar o efeito da perda, de modo que a
-previsão possa ser lida diretamente contra a âncora de C. A Figura~\ref{fig:estresse}
-apresenta a curva tempo $\times$ perda: ancorado em C ($20\%$ bruto, simulado $146$~s
-\emph{vs.}\ real $144{,}6$~s, erro de $1{,}2\%$), o modelo prevê
-$\approx 213$~s a $25\%$ (IC 95\% $[207;\,218]$), isto é, $+47\%$ sobre C. A previsão é
-coerente: situa-se acima de C na curva monotônica de perda \emph{versus} tempo.
+A tarefa de estresse consiste em prever o tempo de transferência sob $25\%$ de perda bruta.
+Como a perda configurada atua por pacote IP, aplica-se novamente a Equação~\ref{eq:frag}.
+Assim, $25\%$ de perda bruta correspondem a $p_{\text{ef}} = 1-(0{,}75)^3 = 57{,}8\%$ de
+perda efetiva por bloco. O atraso é mantido em $100$~ms, valor correspondente ao cenário C,
+para isolar o efeito da perda.
+
+A Figura~\ref{fig:estresse} apresenta a relação entre tempo de transferência e perda
+bruta. No ponto de ancoragem do cenário C, com $20\%$ de perda bruta, o modelo produz
+$146$~s, próximo ao valor real de $144{,}6$~s. Para $25\%$ de perda bruta, o modelo prevê
+aproximadamente $213$~s, com IC 95\% entre $207$ e $218$~s. Esse valor representa aumento
+de cerca de $47\%$ em relação ao cenário C e mantém coerência com a tendência monotônica da
+curva.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\textwidth]{imgs/fase2_estresse.png}
-\caption{Cenário de estresse (tarefa~8): previsão do tempo de transferência \emph{vs.}\
-perda bruta, com a âncora real de C ($20\%$) marcada. A $25\%$ ($p_{\text{ef}}=57{,}8\%$) o
-modelo prevê $\approx 213$~s.}
+\caption{Cenário de estresse: previsão do tempo de transferência em função da perda bruta,
+com o cenário C usado como ponto de ancoragem. Para $25\%$ de perda bruta, o modelo prevê
+aproximadamente $213$~s.}
 \label{fig:estresse}
 \end{figure}
 
 \subsection{Eficiência: razão DADOS/ACK}
 \label{sec:eficiencia}
 
-Um receptor Go-Back-N responde a cada DADO que chega com um ACK cumulativo; logo, os
-únicos DADOS que ficam sem ACK são os que o canal descarta --- e que são reenviados. A
-razão entre pacotes de DADOS transmitidos e ACKs emitidos é, assim, $\approx 1$ em canal
-limpo e cresce com a perda segundo
+Em Go-Back-N, o receptor responde a cada pacote de DADOS recebido com um ACK cumulativo.
+Consequentemente, os pacotes de DADOS que não geram ACK são aqueles descartados pelo canal
+e posteriormente retransmitidos. A razão entre pacotes de DADOS transmitidos e ACKs
+emitidos deve ser próxima de 1 em canal sem perdas e crescer com a perda segundo
 \begin{equation}
   \frac{\text{DADOS}}{\text{ACK}} = \frac{1}{1 - p_{\text{ef}}}.
   \label{eq:eff}
 \end{equation}
-A Figura~\ref{fig:eficiencia} confirma a Equação~\ref{eq:eff} (tarefa~9): as razões
-medidas no simulador são $1{,}00$ (A), $1{,}38$ (B) e $1{,}96$ (C), praticamente idênticas
-às previsões $1/(1-p_{\text{ef}})$ de $1{,}000$, $1{,}372$ e $1{,}953$. A eficiência piora
-monotonicamente com a perda --- cada ACK útil custa cada vez mais transmissões de DADOS ---
-e fornece uma validação interna em forma fechada do motor instrumentado.
 
-\begin{figure}[ht]
+A Figura~\ref{fig:eficiencia} confirma esse comportamento. As razões medidas no simulador
+foram $1{,}00$ no cenário A, $1{,}38$ no cenário B e $1{,}96$ no cenário C, valores muito
+próximos das previsões analíticas de $1{,}000$, $1{,}372$ e $1{,}953$. A eficiência degrada
+monotonicamente com a perda, pois cada ACK útil passa a exigir número crescente de
+transmissões de DADOS. Esse resultado fornece uma validação interna adicional do motor
+instrumentado.
+
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.78\textwidth]{imgs/fase2_eficiencia.png}
-\caption{Eficiência (tarefa~9): razão de pacotes DADOS/ACK por cenário. Os valores
-medidos seguem a lei $1/(1-p_{\text{ef}})$; a eficiência degrada-se com a perda.}
+\caption{Eficiência medida pela razão DADOS/ACK por cenário. Os valores simulados seguem a
+lei $1/(1-p_{\text{ef}})$ e indicam degradação progressiva da eficiência com o aumento da
+perda.}
 \label{fig:eficiencia}
 \end{figure}
 
-\section{Discussão: Teoria Estocástica \emph{versus} Prática}
+\FloatBarrier
+
+\section{Discussão: Teoria Estocástica e Prática de Rede}
 \label{sec:discussao}
 
-\textbf{Resultado central.} Um modelo de eventos discretos parcimonioso, parametrizado
-apenas por grandezas físicas (RTT, $p_{\text{ef}}$, janela, \emph{timeout} e contagem de
-blocos), reproduz o sistema real ao longo de uma faixa de $0{,}67$ a $145$~s com erro de
-$1{,}0$ a $7{,}4\%$, sem qualquer fator de ajuste. As contagens de retransmissão, a vazão e a
-eficiência emergem do mesmo modelo e concordam com limites em forma fechada independentes
-(Equações~\ref{eq:knee} e~\ref{eq:eff}).
+Os resultados indicam que um modelo de eventos discretos parcimonioso, parametrizado por
+RTT, perda efetiva, janela, timeout e número de blocos, é capaz de reproduzir o sistema
+real com erro relativo entre $1{,}0$ e $7{,}4\%$ em uma faixa de tempo de transferência de
+$0{,}67$ a $145$~s. As contagens de retransmissão, a vazão e a eficiência decorrem do
+mesmo modelo e permanecem compatíveis com limites analíticos independentes, como os das
+Equações~\ref{eq:knee} e~\ref{eq:eff}.
 
-\textbf{Onde o modelo diverge, e por quê.} O objeto declarado deste projeto são justamente
-as discrepâncias. Observamos duas. \emph{(i)} No canal limpo (A), o simulador é
-$\approx 1\%$ mais rápido que o real, porque omite o custo fixo de estabelecimento e
-encerramento de sessão (\emph{handshake}, escalonamento de \emph{sockets}) que domina uma
-transferência sub-segundo no sistema real. \emph{(ii)} Sob perda (B e C), o simulador é
-$2{,}9$ a $7{,}4\%$ mais lento e ligeiramente mais pessimista nas retransmissões. Três abstrações
-deliberadas concorrem para isso: os ACKs são supostos sempre entregues (no sistema real,
-um ACK cumulativo frequentemente chega antes do \emph{timeout} de $0{,}5$~s, reduzindo
-retransmissões); a perda é Bernoulli sem memória, enquanto o descarte do \texttt{netem},
-após a remontagem de fragmentos correlacionados, pode reter correlação que agrupa perdas e
-permite ao Go-Back-N amortizar retrocessos; e o atraso é Normal, e não a distribuição
-empírica do \texttt{netem}.
+Apesar da boa concordância geral, permanecem discrepâncias sistemáticas. No cenário A, sem
+perda, o simulador é aproximadamente $1\%$ mais rápido que o sistema real. Esse desvio pode
+ser explicado pela omissão de custos fixos de estabelecimento e encerramento da sessão,
+incluindo handshake, escalonamento de sockets e demais efeitos de implementação que têm
+maior peso em transferências sub-segundo. Nos cenários B e C, o simulador é entre
+$2{,}9\%$ e $7{,}4\%$ mais lento e apresenta retransmissões ligeiramente superiores às
+observadas.
 
-\textbf{Um achado não trivial.} O viés é \emph{maior} na perda intermediária (B,
-$+7{,}4\%$) e \emph{menor} no extremo (C, $+2{,}9\%$, com o real coberto pelo IC). A
-interpretação é que, sob perda muito alta, modelo e realidade são ambos dominados pelo
-mesmo regime de cascatas de \emph{timeout} e convergem; é na perda moderada que os efeitos
-de segunda ordem (perda de ACK, correlação) mais pesam. Esse padrão sugere onde o
-refinamento do modelo seria mais proveitoso.
+Um aspecto relevante é que o maior viés ocorre no cenário B, de perda intermediária,
+enquanto o cenário C, de perda mais severa, apresenta menor erro e tem o valor real coberto
+pelo intervalo de confiança. Uma interpretação plausível é que, sob perda muito alta,
+tanto o modelo quanto o sistema real passam a ser dominados por cascatas de timeout,
+reduzindo a influência relativa dos efeitos de segunda ordem. Em perda moderada, por outro
+lado, detalhes como correlação de perdas, comportamento dos ACKs e distribuição real dos
+atrasos exercem maior influência sobre o resultado final.
 
-\textbf{Valor da abordagem orientada a eventos.} O \emph{mesmo} modelo, sem alterações,
-produziu a calibração, a curva de vazão, a sensibilidade da janela, o impacto do
-\emph{jitter}, a previsão de estresse e a eficiência, cada uma cruzada com um limite
-teórico. Essa consistência decorre de o tempo e as retransmissões \emph{emergirem} da
-dinâmica de eventos, em vez de serem inseridos por fórmulas \emph{ad hoc}.
+A principal vantagem da abordagem orientada a eventos é a consistência entre experimentos.
+Sem alterar a estrutura do modelo, foi possível realizar calibração, análise de vazão,
+sensibilidade de janela, avaliação do jitter, previsão de estresse e medição de eficiência.
+Essa unidade metodológica ocorre porque tempo e retransmissões emergem da dinâmica dos
+eventos, em vez de serem impostos por equações ajustadas separadamente para cada análise.
 
-\textbf{Limitações.} O estudo modela apenas o Go-Back-N; a perda é i.i.d.\ Bernoulli; o
-atraso é Normal; os ACKs não se perdem; e algumas varreduras ancoram-se em um único ponto
-de operação por cenário. Essas escolhas circunscrevem o escopo das conclusões e orientam o
-trabalho futuro.
+O estudo também apresenta limitações. O modelo considera apenas o Go-Back-N, adota perda
+Bernoulli i.i.d., representa o atraso por distribuição Normal, não modela perdas de ACK e
+ancora algumas varreduras em um único ponto de operação por cenário. Essas escolhas
+definem o escopo das conclusões e indicam oportunidades de refinamento.
 
 \section{Conclusão e Trabalhos Futuros}
 
-Apresentamos um modelo estocástico de eventos discretos, em SimPy, de um R-UDP Go-Back-N, e
-o validamos contra um sistema real emulado em Docker. Sem fatores de ajuste, o modelo
-reproduz a linha de base ao longo de uma faixa de $200\times$ com erro de $1{,}0$ a $7{,}4\%$, tem
-o cenário de alta perda coberto por um IC \emph{bootstrap} de $95\%$, e satisfaz as dez
-tarefas de validação do enunciado, cada uma corroborada por um limite analítico
-independente. Tão importante quanto o acordo, a análise dos resíduos localiza e explica as
-discrepâncias entre a teoria estocástica e a prática de rede --- o objetivo central do
-projeto.
+Este artigo apresentou um modelo estocástico de eventos discretos, implementado em SimPy,
+para um protocolo R-UDP Go-Back-N. O modelo foi validado contra um sistema real emulado em
+Docker e parametrizado a partir de grandezas observáveis, sem fatores de ajuste. Os
+resultados mostram que o simulador reproduz a linha de base empírica em uma faixa de
+aproximadamente $200\times$ nos tempos de transferência, com erro relativo entre $1{,}0$ e
+$7{,}4\%$. O cenário de alta perda é coberto por intervalo de confiança bootstrap de 95\%,
+e as dez tarefas de validação são satisfeitas de forma compatível com limites analíticos
+independentes.
 
-Como trabalho futuro, destacam-se: \textbf{(a)} a inclusão do \emph{Selective Repeat} no
-simulador e uma comparação Go-Back-N \emph{vs.}\ SR quanto a \emph{goodput} sob perda,
-barata de obter em ambiente simulado; \textbf{(b)} a modelagem explícita da perda de ACKs e
-de um canal com perda correlacionada (por exemplo, Gilbert-Elliott), para testar
-diretamente a hipótese que explica o viés do cenário~B; \textbf{(c)} o ajuste da
-distribuição de atraso à lei empírica do \texttt{netem}; e \textbf{(d)} uma calibração
-multiponto com validação estatística formal (testes pareados ou de
-equivalência)~\cite{jain1991}.
+Além da proximidade numérica, a análise dos resíduos contribui para localizar as diferenças
+entre a modelagem estocástica e a prática de rede. Os desvios observados são pequenos, mas
+informativos: indicam o impacto de custos fixos de implementação em transferências curtas e
+sugerem que correlação de perdas, dinâmica de ACKs e distribuição empírica do atraso podem
+explicar parte da diferença sob perda moderada.
 
+Como trabalhos futuros, propõe-se incluir o Selective Repeat no simulador e comparar seu
+goodput com o Go-Back-N sob diferentes regimes de perda. Também se recomenda modelar
+explicitamente a perda de ACKs e avaliar canais com perda correlacionada, como o modelo de
+Gilbert-Elliott, para testar a hipótese associada ao viés observado no cenário B. Outra
+extensão relevante consiste em ajustar a distribuição de atraso à lei empírica produzida
+pelo \texttt{netem}. Por fim, uma calibração multiponto, acompanhada de testes pareados ou
+de equivalência~\cite{jain1991}, permitiria uma validação estatística mais abrangente.
+
+\FloatBarrier
 \bibliographystyle{sbc}
 \bibliography{references}
 
