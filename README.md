@@ -33,7 +33,7 @@ O sistema implementa um protocolo confiável de transferência de arquivos **em 
 | **B** | 10% | 50 ms  | 100 ms | 27,1% |
 | **C** | 20% | 100 ms | 200 ms | 48,8% |
 
-¹ Cada datagrama DATA (4 112 B) é fragmentado em 3 pacotes IP pelo kernel; `p_ef = 1 − (1−p)³`.
+¹ Cada datagrama DATA (4 112 B) é fragmentado em 3 pacotes IP pelo kernel; `pef = 1 − (1−p)³`.
 
 ---
 
